@@ -1,5 +1,28 @@
 <nav 
-    x-data="{ open: false, dark: false }"
+    x-data="{
+        open: false, 
+        dark: false,
+        init() {
+            const storedTheme = localStorage.getItem('theme');
+            if (storedTheme === 'dark') {
+                this.dark = true;
+            } else if (storedTheme === 'light') {
+                this.dark = false;
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                this.dark = true;
+            }
+
+            this.$watch('dark', value => {
+                if (value) {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        }
+    }"
     :class="dark ? 'bg-[#0f172a] border-slate-700' : 'bg-gradient-to-r from-slate-50/80 to-blue-50/80 border-slate-200/80'"
     class="sticky top-0 w-full border-b shadow-lg backdrop-blur-md transition duration-300"
 >
@@ -102,7 +125,7 @@
                 </div>
             </div>
 
-            <!-- Right Menu: Dark Mode + Profile -->
+            <!-- Right Menu: Dark Mode + Profile/Auth -->
             <div class="hidden sm:flex items-center gap-3">
 
                 <!-- Dark Mode Toggle -->
@@ -121,38 +144,52 @@
                     </template>
                 </button>
 
-                <!-- Profile Dropdown -->
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button 
-                            class="inline-flex items-center px-3 py-2 rounded-lg border transition duration-300"
-                            :class="dark 
-                                ? 'bg-slate-800 border-slate-600 text-white hover:text-blue-300' 
-                                : 'bg-white border-slate-200 text-slate-700 hover:text-blue-600'"
-                        >
-                            <div>{{ Auth::user()->name }}</div>
-                            <div class="ms-1">
-                                <i class="bi bi-chevron-down text-xs"></i>
-                            </div>
-                        </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            Profile
-                        </x-dropdown-link>
-
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <x-dropdown-link 
-                                :href="route('logout')"
-                                onclick="event.preventDefault(); this.closest('form').submit();"
+                @auth
+                    <!-- Profile Dropdown -->
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button 
+                                class="inline-flex items-center px-3 py-2 rounded-lg border transition duration-300"
+                                :class="dark 
+                                    ? 'bg-slate-800 border-slate-600 text-white hover:text-blue-300' 
+                                    : 'bg-white border-slate-200 text-slate-700 hover:text-blue-600'"
                             >
-                                Log Out
+                                <div>{{ Auth::user()->name }}</div>
+                                <div class="ms-1">
+                                    <i class="bi bi-chevron-down text-xs"></i>
+                                </div>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('profile.edit')">
+                                Profile
                             </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
+
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <x-dropdown-link 
+                                    :href="route('logout')"
+                                    onclick="event.preventDefault(); this.closest('form').submit();"
+                                >
+                                    Log Out
+                                </x-dropdown-link>
+                            </form>
+                        </x-slot>
+                    </x-dropdown>
+                @else
+                    <!-- Auth buttons for guests -->
+                    <a href="{{ route('login') }}" class="btn btn-outline">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        Masuk
+                    </a>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="btn btn-primary">
+                            <i class="bi bi-person-plus"></i>
+                            Daftar
+                        </a>
+                    @endif
+                @endauth
             </div>
 
             <!-- Mobile Hamburger -->
@@ -208,40 +245,42 @@
         </div>
 
         <!-- Mobile Profile -->
-        <div 
-            class="pt-4 pb-1 border-t"
-            :class="dark ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'"
-        >
-            <div class="px-4">
-                <div 
-                    :class="dark ? 'text-white' : 'text-slate-800'" 
-                    class="font-medium"
-                >
-                    {{ Auth::user()->name }}
-                </div>
-                <div 
-                    :class="dark ? 'text-slate-300' : 'text-slate-500'" 
-                    class="text-sm"
-                >
-                    {{ Auth::user()->email }}
-                </div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    Profile
-                </x-responsive-nav-link>
-
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <x-responsive-nav-link 
-                        :href="route('logout')"
-                        onclick="event.preventDefault(); this.closest('form').submit();"
+        @auth
+            <div 
+                class="pt-4 pb-1 border-t"
+                :class="dark ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'"
+            >
+                <div class="px-4">
+                    <div 
+                        :class="dark ? 'text-white' : 'text-slate-800'" 
+                        class="font-medium"
                     >
-                        Log Out
+                        {{ Auth::user()->name }}
+                    </div>
+                    <div 
+                        :class="dark ? 'text-slate-300' : 'text-slate-500'" 
+                        class="text-sm"
+                    >
+                        {{ Auth::user()->email }}
+                    </div>
+                </div>
+
+                <div class="mt-3 space-y-1">
+                    <x-responsive-nav-link :href="route('profile.edit')">
+                        Profile
                     </x-responsive-nav-link>
-                </form>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <x-responsive-nav-link 
+                            :href="route('logout')"
+                            onclick="event.preventDefault(); this.closest('form').submit();"
+                        >
+                            Log Out
+                        </x-responsive-nav-link>
+                    </form>
+                </div>
             </div>
-        </div>
+        @endauth
     </div>
 </nav>

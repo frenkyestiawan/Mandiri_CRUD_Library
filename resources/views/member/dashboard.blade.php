@@ -1,133 +1,734 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard Anggota') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div class="p-4 bg-blue-100 rounded">
-                        <div class="text-sm text-gray-500">Peminjaman Aktif</div>
-                        <div class="text-2xl font-bold">{{ $activeLoansCount }}</div>
-                    </div>
-                    <div class="p-4 bg-red-100 rounded">
-                        <div class="text-sm text-gray-500">Pengembalian Terlambat</div>
-                        <div class="text-2xl font-bold">{{ $lateReturnsCount }}</div>
+@section('title', 'Dashboard Anggota - E-PERPUS')
+
+@push('styles')
+<style>
+    /* Welcome Hero */
+    .welcome-hero {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #6366f1 100%);
+        border-radius: 20px;
+        padding: 3rem 2.5rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 20px 50px rgba(59, 130, 246, 0.3);
+        margin-bottom: 2rem;
+    }
+
+    body.dark .welcome-hero {
+        background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 50%, #4338ca 100%);
+        box-shadow: 0 20px 50px rgba(30, 58, 138, 0.5);
+    }
+
+    .welcome-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 400px;
+        height: 400px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        filter: blur(60px);
+    }
+
+    .welcome-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .welcome-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-subtitle {
+        font-size: 1.05rem;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 2rem;
+    }
+
+    .welcome-info {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .info-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 16px;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+    }
+
+    .info-icon {
+        font-size: 1.75rem;
+    }
+
+    .info-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .info-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    .info-label {
+        font-size: 0.875rem;
+        opacity: 0.9;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        border-radius: 20px;
+        padding: 1.75rem;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid;
+    }
+
+    body:not(.dark) .stat-card {
+        background: white;
+        border-color: #e2e8f0;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    body.dark .stat-card {
+        background: #1e293b;
+        border-color: rgba(100, 116, 139, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(59, 130, 246, 0.15);
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        transform: translate(30%, -30%);
+    }
+
+    .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .stat-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover .stat-icon {
+        transform: scale(1.1) rotate(-5deg);
+    }
+
+    .stat-icon.blue {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+    }
+
+    body.dark .stat-icon.blue {
+        background: rgba(96, 165, 250, 0.15);
+        color: #60a5fa;
+    }
+
+    .stat-icon.red {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+
+    body.dark .stat-icon.red {
+        background: rgba(248, 113, 113, 0.15);
+        color: #f87171;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+    }
+
+    body:not(.dark) .stat-label {
+        color: #64748b;
+    }
+
+    body.dark .stat-label {
+        color: #94a3b8;
+    }
+
+    .stat-value {
+        font-size: 2.25rem;
+        font-weight: 800;
+        line-height: 1;
+    }
+
+    body:not(.dark) .stat-value {
+        color: #1e293b;
+    }
+
+    body.dark .stat-value {
+        color: #f1f5f9;
+    }
+
+    /* Content Card */
+    .content-card {
+        border-radius: 20px;
+        padding: 1.75rem;
+        transition: all 0.3s ease;
+        border: 1px solid;
+        margin-bottom: 2rem;
+    }
+
+    body:not(.dark) .content-card {
+        background: white;
+        border-color: #e2e8f0;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    body.dark .content-card {
+        background: #1e293b;
+        border-color: rgba(100, 116, 139, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    body:not(.dark) .card-title {
+        color: #1e293b;
+    }
+
+    body.dark .card-title {
+        color: #f1f5f9;
+    }
+
+    .card-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.125rem;
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+    }
+
+    body.dark .card-icon {
+        background: rgba(96, 165, 250, 0.15);
+        color: #60a5fa;
+    }
+
+    /* Recommendation List */
+    .recommendation-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .recommendation-item {
+        padding: 1rem;
+        border-radius: 12px;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.2s ease;
+        border: 1px solid;
+        cursor: pointer;
+    }
+
+    body:not(.dark) .recommendation-item {
+        background: #f8fafc;
+        border-color: #e2e8f0;
+    }
+
+    body.dark .recommendation-item {
+        background: #0f172a;
+        border-color: rgba(100, 116, 139, 0.3);
+    }
+
+    .recommendation-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+    }
+
+    body.dark .recommendation-item:hover {
+        box-shadow: 0 4px 12px rgba(96, 165, 250, 0.15);
+    }
+
+    .recommendation-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+    }
+
+    body.dark .recommendation-icon {
+        background: rgba(96, 165, 250, 0.15);
+        color: #60a5fa;
+    }
+
+    .recommendation-text {
+        flex: 1;
+    }
+
+    .recommendation-title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 0.25rem;
+    }
+
+    body:not(.dark) .recommendation-title {
+        color: #1e293b;
+    }
+
+    body.dark .recommendation-title {
+        color: #f1f5f9;
+    }
+
+    .recommendation-author {
+        font-size: 0.85rem;
+    }
+
+    body:not(.dark) .recommendation-author {
+        color: #64748b;
+    }
+
+    body.dark .recommendation-author {
+        color: #94a3b8;
+    }
+
+    .recommendation-badge {
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    body.dark .recommendation-badge {
+        background: rgba(52, 211, 153, 0.15);
+        color: #34d399;
+    }
+
+    /* Table */
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .data-table thead {
+        border-bottom: 2px solid;
+    }
+
+    body:not(.dark) .data-table thead {
+        background: #f8fafc;
+        border-bottom-color: #e2e8f0;
+    }
+
+    body.dark .data-table thead {
+        background: #0f172a;
+        border-bottom-color: rgba(100, 116, 139, 0.3);
+    }
+
+    .data-table th {
+        padding: 0.875rem;
+        text-align: left;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    body:not(.dark) .data-table th {
+        color: #64748b;
+    }
+
+    body.dark .data-table th {
+        color: #94a3b8;
+    }
+
+    .data-table tbody tr {
+        border-bottom: 1px solid;
+        transition: all 0.2s ease;
+    }
+
+    body:not(.dark) .data-table tbody tr {
+        border-bottom-color: #f1f5f9;
+    }
+
+    body.dark .data-table tbody tr {
+        border-bottom-color: rgba(100, 116, 139, 0.2);
+    }
+
+    .data-table tbody tr:hover {
+        background: rgba(59, 130, 246, 0.05);
+    }
+
+    body.dark .data-table tbody tr:hover {
+        background: rgba(96, 165, 250, 0.08);
+    }
+
+    .data-table td {
+        padding: 0.875rem;
+        font-size: 0.9rem;
+    }
+
+    body:not(.dark) .data-table td {
+        color: #334155;
+    }
+
+    body.dark .data-table td {
+        color: #cbd5e1;
+    }
+
+    /* Status Badge */
+    .status-badge {
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .status-badge.pending {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+    }
+
+    body.dark .status-badge.pending {
+        background: rgba(251, 191, 36, 0.15);
+        color: #fbbf24;
+    }
+
+    .status-badge.approved {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+    }
+
+    body.dark .status-badge.approved {
+        background: rgba(96, 165, 250, 0.15);
+        color: #60a5fa;
+    }
+
+    .status-badge.rejected {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+
+    body.dark .status-badge.rejected {
+        background: rgba(248, 113, 113, 0.15);
+        color: #f87171;
+    }
+
+    .status-badge.returned {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    body.dark .status-badge.returned {
+        background: rgba(52, 211, 153, 0.15);
+        color: #34d399;
+    }
+
+    .status-badge.late {
+        background: rgba(239, 68, 68, 0.15);
+        color: #dc2626;
+        margin-left: 0.5rem;
+    }
+
+    body.dark .status-badge.late {
+        background: rgba(248, 113, 113, 0.2);
+        color: #fca5a5;
+    }
+
+    /* Empty State */
+    .empty-state {
+        padding: 2rem;
+        text-align: center;
+    }
+
+    body:not(.dark) .empty-state {
+        color: #64748b;
+    }
+
+    body.dark .empty-state {
+        color: #94a3b8;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .welcome-title {
+            font-size: 1.5rem;
+        }
+
+        .welcome-info {
+            gap: 1rem;
+        }
+
+        .info-card {
+            flex: 1 1 100%;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .content-card {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            min-width: 600px;
+        }
+    }
+</style>
+@endpush
+
+@section('content')
+<div class="container" style="padding-top: 2rem; padding-bottom: 2rem;">
+    
+    <!-- Welcome Hero -->
+    <div class="welcome-hero">
+        <div class="welcome-content">
+            <h1 class="welcome-title">Selamat Datang, {{ Auth::user()->name }}!</h1>
+            <p class="welcome-subtitle">Kelola peminjaman buku dan jelajahi koleksi perpustakaan digital</p>
+            
+            <div class="welcome-info">
+                <div class="info-card">
+                    <i class="bi bi-calendar-check info-icon"></i>
+                    <div class="info-text">
+                        <span class="info-value">{{ now()->translatedFormat('d F Y') }}</span>
+                        <span class="info-label">Hari ini</span>
                     </div>
                 </div>
-                <h3 class="font-semibold mb-2">Rekomendasi Buku</h3>
-                <ul class="list-disc list-inside text-sm">
-                    @forelse($recommendedBooks as $book)
-                        <li>{{ $book->title }} oleh {{ $book->author }} ({{ $book->loans_count }} kali dipinjam)</li>
-                    @empty
-                        <li>Belum ada data buku.</li>
-                    @endforelse
-                </ul>
-            </div>
-
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h3 class="font-semibold mb-2">Riwayat Peminjaman Saya</h3>
-                <table class="min-w-full text-left text-sm">
-                    <thead>
-                        <tr class="border-b">
-                            <th class="px-3 py-2">Buku</th>
-                            <th class="px-3 py-2">Status</th>
-                            <th class="px-3 py-2">Pinjam</th>
-                            <th class="px-3 py-2">Jatuh Tempo</th>
-                            <th class="px-3 py-2">Kembali</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($myLoans as $loan)
-                            <tr class="border-b">
-                                <td class="px-3 py-2">{{ $loan->book->title }}</td>
-                                <td class="px-3 py-2">
-                                    @php
-                                        $status = $loan->status;
-                                        $label = match($status) {
-                                            'pending' => 'Menunggu persetujuan',
-                                            'approved' => 'Sedang dipinjam',
-                                            'returned' => 'Selesai',
-                                            'rejected' => 'Ditolak',
-                                            default => ucfirst($status),
-                                        };
-                                        $badgeClass = match($status) {
-                                            'pending' => 'bg-yellow-100 text-yellow-800',
-                                            'approved' => 'bg-blue-100 text-blue-800',
-                                            'rejected' => 'bg-red-100 text-red-800',
-                                            'returned' => 'bg-green-100 text-green-800',
-                                            default => 'bg-gray-100 text-gray-800',
-                                        };
-                                    @endphp
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $badgeClass }}">
-                                        {{ $label }}
-                                    </span>
-                                    @if($loan->is_late)
-                                        <span class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                            Terlambat
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="px-3 py-2">{{ optional($loan->borrowed_at)->format('d/m/Y') }}</td>
-                                <td class="px-3 py-2">{{ optional($loan->due_at)->format('d/m/Y') }}</td>
-                                <td class="px-3 py-2">{{ optional($loan->returned_at)->format('d/m/Y') }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td class="px-3 py-4" colspan="5">Belum ada riwayat peminjaman.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h3 class="font-semibold mb-2">Peminjaman Pending / Sedang Diproses</h3>
-                <table class="min-w-full text-left text-sm">
-                    <thead>
-                        <tr class="border-b">
-                            <th class="px-3 py-2">Buku</th>
-                            <th class="px-3 py-2">Status</th>
-                            <th class="px-3 py-2">Pinjam</th>
-                            <th class="px-3 py-2">Jatuh Tempo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($pendingApprovedLoans as $loan)
-                            <tr class="border-b">
-                                <td class="px-3 py-2">{{ $loan->book->title }}</td>
-                                <td class="px-3 py-2">
-                                    @php
-                                        $status = $loan->status;
-                                        $label = match($status) {
-                                            'pending' => 'Menunggu persetujuan',
-                                            'approved' => 'Sedang dipinjam',
-                                            default => ucfirst($status),
-                                        };
-                                        $badgeClass = match($status) {
-                                            'pending' => 'bg-yellow-100 text-yellow-800',
-                                            'approved' => 'bg-blue-100 text-blue-800',
-                                            default => 'bg-gray-100 text-gray-800',
-                                        };
-                                    @endphp
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $badgeClass }}">
-                                        {{ $label }}
-                                    </span>
-                                </td>
-                                <td class="px-3 py-2">{{ optional($loan->borrowed_at)->format('d/m/Y') }}</td>
-                                <td class="px-3 py-2">{{ optional($loan->due_at)->format('d/m/Y') }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td class="px-3 py-4" colspan="4">Tidak ada peminjaman pending atau sedang diproses.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>
-</x-app-layout>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-header">
+                <div>
+                    <div class="stat-label">Peminjaman Aktif</div>
+                    <div class="stat-value">{{ $activeLoansCount }}</div>
+                </div>
+                <div class="stat-icon blue">
+                    <i class="bi bi-bookmark-check"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div>
+                    <div class="stat-label">Pengembalian Terlambat</div>
+                    <div class="stat-value">{{ $lateReturnsCount }}</div>
+                </div>
+                <div class="stat-icon red">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommendations -->
+    <div class="content-card">
+        <h3 class="card-title">
+            <span class="card-icon">
+                <i class="bi bi-star"></i>
+            </span>
+            Rekomendasi Buku Populer
+        </h3>
+        <ul class="recommendation-list">
+            @forelse($recommendedBooks as $book)
+                <li class="recommendation-item">
+                    <div class="recommendation-icon">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    <div class="recommendation-text">
+                        <div class="recommendation-title">{{ $book->title }}</div>
+                        <div class="recommendation-author">oleh {{ $book->author }}</div>
+                    </div>
+                    <span class="recommendation-badge">
+                        <i class="bi bi-fire"></i> {{ $book->loans_count }}x dipinjam
+                    </span>
+                </li>
+            @empty
+                <li class="empty-state">
+                    <i class="bi bi-inbox" style="font-size: 2rem; opacity: 0.3; display: block; margin-bottom: 0.5rem;"></i>
+                    Belum ada rekomendasi buku
+                </li>
+            @endforelse
+        </ul>
+    </div>
+
+    <!-- Riwayat Peminjaman -->
+    <div class="content-card">
+        <h3 class="card-title">
+            <span class="card-icon">
+                <i class="bi bi-clock-history"></i>
+            </span>
+            Riwayat Peminjaman Saya
+        </h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Buku</th>
+                    <th>Status</th>
+                    <th>Pinjam</th>
+                    <th>Jatuh Tempo</th>
+                    <th>Kembali</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($myLoans as $loan)
+                    <tr>
+                        <td>{{ $loan->book->title }}</td>
+                        <td>
+                            @php
+                                $status = $loan->status;
+                                $label = match($status) {
+                                    'pending' => 'Menunggu persetujuan',
+                                    'approved' => 'Sedang dipinjam',
+                                    'returned' => 'Selesai',
+                                    'rejected' => 'Ditolak',
+                                    default => ucfirst($status),
+                                };
+                            @endphp
+                            <span class="status-badge {{ $status }}">
+                                {{ $label }}
+                            </span>
+                            @if($loan->is_late)
+                                <span class="status-badge late">
+                                    <i class="bi bi-clock-fill"></i> Terlambat
+                                </span>
+                            @endif
+                        </td>
+                        <td>{{ optional($loan->borrowed_at)->format('d/m/Y') ?? '-' }}</td>
+                        <td>{{ optional($loan->due_at)->format('d/m/Y') ?? '-' }}</td>
+                        <td>{{ optional($loan->returned_at)->format('d/m/Y') ?? '-' }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <i class="bi bi-inbox" style="font-size: 2rem; opacity: 0.3; display: block; margin-bottom: 0.5rem;"></i>
+                                Belum ada riwayat peminjaman
+                            </div>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Peminjaman Pending/Approved -->
+    <div class="content-card">
+        <h3 class="card-title">
+            <span class="card-icon">
+                <i class="bi bi-hourglass-split"></i>
+            </span>
+            Peminjaman Pending / Sedang Diproses
+        </h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Buku</th>
+                    <th>Status</th>
+                    <th>Pinjam</th>
+                    <th>Jatuh Tempo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($pendingApprovedLoans as $loan)
+                    <tr>
+                        <td>{{ $loan->book->title }}</td>
+                        <td>
+                            @php
+                                $status = $loan->status;
+                                $label = match($status) {
+                                    'pending' => 'Menunggu persetujuan',
+                                    'approved' => 'Sedang dipinjam',
+                                    default => ucfirst($status),
+                                };
+                            @endphp
+                            <span class="status-badge {{ $status }}">
+                                {{ $label }}
+                            </span>
+                        </td>
+                        <td>{{ optional($loan->borrowed_at)->format('d/m/Y') ?? '-' }}</td>
+                        <td>{{ optional($loan->due_at)->format('d/m/Y') ?? '-' }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4">
+                            <div class="empty-state">
+                                <i class="bi bi-inbox" style="font-size: 2rem; opacity: 0.3; display: block; margin-bottom: 0.5rem;"></i>
+                                Tidak ada peminjaman pending atau sedang diproses
+                            </div>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+</div>
+@endsection

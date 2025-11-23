@@ -1,62 +1,835 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Detail Peminjaman') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-6">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 space-y-4">
-                <div>
-                    <h3 class="font-semibold">Anggota</h3>
-                    <p>{{ $loan->user->name }} ({{ $loan->user->email }})</p>
-                </div>
-                <div>
-                    <h3 class="font-semibold">Buku</h3>
-                    <p>{{ $loan->book->title }} oleh {{ $loan->book->author }}</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <h3 class="font-semibold">Status</h3>
-                        <p>{{ ucfirst($loan->status) }}</p>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold">Tanggal</h3>
-                        <p>Pinjam: {{ optional($loan->borrowed_at)->format('d/m/Y') ?? '-' }}</p>
-                        <p>Jatuh Tempo: {{ optional($loan->due_at)->format('d/m/Y') ?? '-' }}</p>
-                        <p>Kembali: {{ optional($loan->returned_at)->format('d/m/Y') ?? '-' }}</p>
-                    </div>
-                </div>
+@section('title', 'Detail Peminjaman - E-PERPUS')
 
-                <div>
-                    <h3 class="font-semibold">Keterlambatan / Sanksi</h3>
-                    <p>
-                        @if($loan->is_late)
-                            Terlambat
-                            @if($loan->penalty_note)
-                                - {{ $loan->penalty_note }}
-                            @endif
-                        @else
-                            Tidak terlambat
-                        @endif
-                    </p>
-                </div>
+@push('styles')
+<style>
+    /* Page Header */
+    .page-header-section {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
 
-                <div class="flex justify-end space-x-2 mt-4">
-                    <a href="{{ route('admin.loans.index') }}" class="px-4 py-2 bg-gray-200 rounded">Kembali</a>
-                    @if($loan->status === 'pending')
-                        <form action="{{ route('admin.loans.approve', $loan) }}" method="POST" class="inline">
-                            @csrf
-                            <button class="px-4 py-2 bg-green-600 text-white rounded">Approve</button>
-                        </form>
-                        <form action="{{ route('admin.loans.reject', $loan) }}" method="POST" class="inline">
-                            @csrf
-                            <button class="px-4 py-2 bg-red-600 text-white rounded">Reject</button>
-                        </form>
-                    @endif
+    body.dark .page-header-section {
+        background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+    }
+
+    .page-header-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        filter: blur(60px);
+    }
+
+    .page-header-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+    }
+
+    .page-header-left h1 {
+        font-size: 1.75rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+    }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        opacity: 0.9;
+        flex-wrap: wrap;
+    }
+
+    .breadcrumb a {
+        color: white;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .breadcrumb a:hover {
+        opacity: 0.7;
+    }
+
+    /* Detail Card */
+    .detail-card {
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid;
+        padding: 2rem;
+    }
+
+    body:not(.dark) .detail-card {
+        background: white;
+        border-color: #e2e8f0;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    body.dark .detail-card {
+        background: #1e293b;
+        border-color: rgba(100, 116, 139, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Info Section */
+    .info-section {
+        margin-bottom: 2rem;
+    }
+
+    .info-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .section-title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    body:not(.dark) .section-title {
+        color: #1e293b;
+    }
+
+    body.dark .section-title {
+        color: #f1f5f9;
+    }
+
+    .section-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.125rem;
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    body.dark .section-icon {
+        background: rgba(52, 211, 153, 0.15);
+        color: #34d399;
+    }
+
+    .info-content {
+        padding: 1.25rem;
+        border-radius: 12px;
+        border: 1px solid;
+    }
+
+    body:not(.dark) .info-content {
+        background: #f8fafc;
+        border-color: #e2e8f0;
+    }
+
+    body.dark .info-content {
+        background: #0f172a;
+        border-color: rgba(100, 116, 139, 0.3);
+    }
+
+    .info-text {
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+
+    body:not(.dark) .info-text {
+        color: #334155;
+    }
+
+    body.dark .info-text {
+        color: #cbd5e1;
+    }
+
+    .info-label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+
+    body:not(.dark) .info-label {
+        color: #64748b;
+    }
+
+    body.dark .info-label {
+        color: #94a3b8;
+    }
+
+    /* Grid Layout */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.25rem;
+    }
+
+    .info-item {
+        padding: 1rem;
+        border-radius: 10px;
+        border: 1px solid;
+    }
+
+    body:not(.dark) .info-item {
+        background: white;
+        border-color: #e2e8f0;
+    }
+
+    body.dark .info-item {
+        background: #1e293b;
+        border-color: rgba(100, 116, 139, 0.3);
+    }
+
+    /* Status Badge */
+    .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        display: inline-block;
+        text-transform: capitalize;
+    }
+
+    .status-badge.pending {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+    }
+
+    body.dark .status-badge.pending {
+        background: rgba(251, 191, 36, 0.15);
+        color: #fbbf24;
+    }
+
+    .status-badge.approved {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+    }
+
+    body.dark .status-badge.approved {
+        background: rgba(96, 165, 250, 0.15);
+        color: #60a5fa;
+    }
+
+    .status-badge.rejected {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+
+    body.dark .status-badge.rejected {
+        background: rgba(248, 113, 113, 0.15);
+        color: #f87171;
+    }
+
+    .status-badge.returned {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    body.dark .status-badge.returned {
+        background: rgba(52, 211, 153, 0.15);
+        color: #34d399;
+    }
+
+    /* Late Badge */
+    .late-badge {
+        padding: 0.75rem 1.25rem;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #dc2626;
+    }
+
+    body.dark .late-badge {
+        background: rgba(248, 113, 113, 0.15);
+        border-color: rgba(248, 113, 113, 0.3);
+        color: #fca5a5;
+    }
+
+    .late-badge i {
+        font-size: 1.25rem;
+    }
+
+    .no-late-badge {
+        padding: 0.75rem 1.25rem;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #059669;
+    }
+
+    body.dark .no-late-badge {
+        background: rgba(52, 211, 153, 0.15);
+        border-color: rgba(52, 211, 153, 0.3);
+        color: #34d399;
+    }
+
+    /* Divider */
+    .divider {
+        margin: 2rem 0;
+        border: none;
+        height: 1px;
+    }
+
+    body:not(.dark) .divider {
+        background: #e2e8f0;
+    }
+
+    body.dark .divider {
+        background: rgba(100, 116, 139, 0.3);
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        padding-top: 2rem;
+        border-top: 1px solid;
+        flex-wrap: wrap;
+    }
+
+    body:not(.dark) .action-buttons {
+        border-top-color: #e2e8f0;
+    }
+
+    body.dark .action-buttons {
+        border-top-color: rgba(100, 116, 139, 0.3);
+    }
+
+    .btn {
+        padding: 0.75rem 1.75rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-secondary {
+        border: 2px solid;
+    }
+
+    body:not(.dark) .btn-secondary {
+        background: white;
+        border-color: #e2e8f0;
+        color: #64748b;
+    }
+
+    body:not(.dark) .btn-secondary:hover {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+    }
+
+    body.dark .btn-secondary {
+        background: transparent;
+        border-color: rgba(100, 116, 139, 0.5);
+        color: #94a3b8;
+    }
+
+    body.dark .btn-secondary:hover {
+        background: rgba(100, 116, 139, 0.2);
+        border-color: #34d399;
+        color: #34d399;
+    }
+
+    /* Modal */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 9998;
+        animation: fadeIn 0.2s ease;
+    }
+
+    .modal-overlay.active {
+        display: block;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+        max-width: 500px;
+        width: 90%;
+        animation: slideUp 0.3s ease;
+    }
+
+    .modal.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -40%);
+        }
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    .modal-content {
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid;
+    }
+
+    body:not(.dark) .modal-content {
+        background: white;
+        border-color: #e2e8f0;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    body.dark .modal-content {
+        background: #1e293b;
+        border-color: rgba(100, 116, 139, 0.3);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid;
+    }
+
+    body:not(.dark) .modal-header {
+        background: #f8fafc;
+        border-bottom-color: #e2e8f0;
+    }
+
+    body.dark .modal-header {
+        background: #0f172a;
+        border-bottom-color: rgba(100, 116, 139, 0.3);
+    }
+
+    .modal-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    body:not(.dark) .modal-title {
+        color: #1e293b;
+    }
+
+    body.dark .modal-title {
+        color: #f1f5f9;
+    }
+
+    .modal-close {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+        font-size: 1.25rem;
+    }
+
+    body:not(.dark) .modal-close {
+        background: #f1f5f9;
+        color: #64748b;
+    }
+
+    body:not(.dark) .modal-close:hover {
+        background: #e2e8f0;
+        color: #1e293b;
+    }
+
+    body.dark .modal-close {
+        background: rgba(100, 116, 139, 0.2);
+        color: #94a3b8;
+    }
+
+    body.dark .modal-close:hover {
+        background: rgba(100, 116, 139, 0.4);
+        color: #e2e8f0;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .modal-text {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    body:not(.dark) .modal-text {
+        color: #475569;
+    }
+
+    body.dark .modal-text {
+        color: #cbd5e1;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: flex-end;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .page-header-content {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+@endpush
+
+@section('content')
+<div class="container" style="padding-top: 2rem; padding-bottom: 2rem; max-width: 1000px;">
+    
+    <!-- Page Header -->
+    <div class="page-header-section">
+        <div class="page-header-content">
+            <div class="page-header-left">
+                <h1><i class="bi bi-info-circle-fill"></i> Detail Peminjaman</h1>
+                <div class="breadcrumb">
+                    <a href="{{ route('admin.loans.index') }}">
+                        <i class="bi bi-arrow-left-right"></i> Peminjaman
+                    </a>
+                    <i class="bi bi-chevron-right"></i>
+                    <span>Detail #{{ $loan->id }}</span>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+
+    <!-- Detail Card -->
+    <div class="detail-card">
+        <!-- Anggota Section -->
+        <div class="info-section">
+            <h3 class="section-title">
+                <span class="section-icon">
+                    <i class="bi bi-person-fill"></i>
+                </span>
+                Informasi Anggota
+            </h3>
+            <div class="info-content">
+                <div style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.5rem;">
+                    {{ $loan->user->name }}
+                </div>
+                <div class="info-text">
+                    <i class="bi bi-envelope"></i> {{ $loan->user->email }}
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Buku Section -->
+        <div class="info-section">
+            <h3 class="section-title">
+                <span class="section-icon">
+                    <i class="bi bi-book-fill"></i>
+                </span>
+                Informasi Buku
+            </h3>
+            <div class="info-content">
+                <div style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.5rem;">
+                    {{ $loan->book->title }}
+                </div>
+                <div class="info-text">
+                    <div style="margin-bottom: 0.25rem;">
+                        <i class="bi bi-person"></i> Penulis: <strong>{{ $loan->book->author }}</strong>
+                    </div>
+                    @if($loan->book->publisher)
+                        <div>
+                            <i class="bi bi-building"></i> Penerbit: {{ $loan->book->publisher }}
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Status & Tanggal Section -->
+        <div class="info-section">
+            <h3 class="section-title">
+                <span class="section-icon">
+                    <i class="bi bi-calendar-check"></i>
+                </span>
+                Status & Tanggal
+            </h3>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Status Peminjaman</div>
+                    <div style="margin-top: 0.5rem;">
+                        <span class="status-badge {{ $loan->status }}">
+                            {{ ucfirst($loan->status) }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="bi bi-calendar-plus"></i> Tanggal Pinjam
+                    </div>
+                    <div class="info-text" style="margin-top: 0.5rem; font-weight: 600;">
+                        {{ optional($loan->borrowed_at)->format('d/m/Y') ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="bi bi-calendar-event"></i> Jatuh Tempo
+                    </div>
+                    <div class="info-text" style="margin-top: 0.5rem; font-weight: 600;">
+                        {{ optional($loan->due_at)->format('d/m/Y') ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="bi bi-calendar-check"></i> Tanggal Kembali
+                    </div>
+                    <div class="info-text" style="margin-top: 0.5rem; font-weight: 600;">
+                        {{ optional($loan->returned_at)->format('d/m/Y') ?? '-' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Keterlambatan Section -->
+        <div class="info-section">
+            <h3 class="section-title">
+                <span class="section-icon">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </span>
+                Status Keterlambatan
+            </h3>
+            
+            @if($loan->is_late)
+                <div class="late-badge">
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                    <div>
+                        <div style="font-weight: 700;">Terlambat!</div>
+                        @if($loan->penalty_note)
+                            <div style="font-size: 0.9rem; margin-top: 0.25rem;">
+                                {{ $loan->penalty_note }}
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @else
+                <div class="no-late-badge">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Tidak ada keterlambatan</span>
+                </div>
+            @endif
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="{{ route('admin.loans.index') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i>
+                Kembali
+            </a>
+            @if($loan->status === 'pending')
+                <button onclick="confirmApprove()" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i>
+                    Approve
+                </button>
+                <button onclick="confirmReject()" class="btn btn-danger">
+                    <i class="bi bi-x-circle"></i>
+                    Reject
+                </button>
+            @endif
+        </div>
+    </div>
+
+</div>
+
+<!-- Approve Confirmation Modal -->
+<div class="modal-overlay" id="approveOverlay" onclick="closeApproveModal()"></div>
+<div class="modal" id="approveModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="bi bi-check-circle-fill" style="color: #10b981;"></i>
+                Konfirmasi Approve
+            </h3>
+            <button class="modal-close" onclick="closeApproveModal()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p class="modal-text">
+                Apakah Anda yakin ingin meng-approve peminjaman buku <strong>{{ $loan->book->title }}</strong> untuk <strong>{{ $loan->user->name }}</strong>?
+            </p>
+            <form action="{{ route('admin.loans.approve', $loan) }}" method="POST">
+                @csrf
+                <div class="modal-actions">
+                    <button type="button" onclick="closeApproveModal()" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i>
+                        Batal
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle"></i>
+                        Ya, Approve
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Reject Confirmation Modal -->
+<div class="modal-overlay" id="rejectOverlay" onclick="closeRejectModal()"></div>
+<div class="modal" id="rejectModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="bi bi-x-circle-fill" style="color: #ef4444;"></i>
+                Konfirmasi Reject
+            </h3>
+            <button class="modal-close" onclick="closeRejectModal()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p class="modal-text">
+                Apakah Anda yakin ingin me-reject peminjaman buku <strong>{{ $loan->book->title }}</strong> untuk <strong>{{ $loan->user->name }}</strong>?
+            </p>
+            <form action="{{ route('admin.loans.reject', $loan) }}" method="POST">
+                @csrf
+                <div class="modal-actions">
+                    <button type="button" onclick="closeRejectModal()" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i>
+                        Batal
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-x-circle"></i>
+                        Ya, Reject
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+<script>
+    function confirmApprove() {
+        document.getElementById('approveOverlay').classList.add('active');
+        document.getElementById('approveModal').classList.add('active');
+    }
+
+    function closeApproveModal() {
+        document.getElementById('approveOverlay').classList.remove('active');
+        document.getElementById('approveModal').classList.remove('active');
+    }
+
+    function confirmReject() {
+        document.getElementById('rejectOverlay').classList.add('active');
+        document.getElementById('rejectModal').classList.add('active');
+    }
+
+    function closeRejectModal() {
+        document.getElementById('rejectOverlay').classList.remove('active');
+        document.getElementById('rejectModal').classList.remove('active');
+    }
+
+    // Close modals with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeApproveModal();
+            closeRejectModal();
+        }
+    });
+</script>
+@endpush

@@ -18,6 +18,7 @@ class BookFactory extends Factory
             'title' => $this->faker->sentence(3),
             'author' => $this->faker->name(),
             'category' => $this->faker->randomElement(['Fiksi', 'Non-Fiksi', 'Pemrograman', 'Database', 'Bisnis']),
+            'publisher' => $this->faker->randomElement(['Penerbit A', 'Penerbit B', 'Penerbit C', 'Penerbit D', 'Penerbit E']) ,
             'stock' => $this->faker->numberBetween(1, 10),
             'published_year' => $this->faker->numberBetween(2000, 2024),
             'description' => $this->faker->paragraph(),

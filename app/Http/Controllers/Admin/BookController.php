@@ -69,6 +69,7 @@ class BookController extends Controller
             'title' => 'required|string|max:255',
             'author' => 'required|string|max:255',
             'category' => 'nullable|string|max:255',
+            'publisher' => 'nullable|string|max:255',
             'stock' => 'required|integer|min:0',
             'published_year' => 'nullable|digits:4',
             'description' => 'nullable|string',

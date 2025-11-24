@@ -1,0 +1,23 @@
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at top, #dbeafe 0, #eff6ff 40%, #e5e7eb 100%);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+}
+
+.auth-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.auth-subtitle {
+    font-size: 0.9rem;
+    color: #6b7280;
+}

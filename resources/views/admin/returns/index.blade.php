@@ -210,15 +210,15 @@
     }
 
     body:not(.dark) .table-card {
-        background: #ffffff;
+        background: #eff6ff; /* Blue 50 - sama dengan halaman peminjaman */
         border-color: #e2e8f0;
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.10);
     }
 
     body.dark .table-card {
-        background: rgba(30, 64, 175, 0.85);
-        border-color: rgba(255, 255, 255, 0.06);
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+        background: rgba(30, 58, 138, 0.6); /* sama dengan halaman peminjaman */
+        border-color: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.20);
     }
 
     .data-table {
@@ -244,11 +244,12 @@
 
     .data-table th {
         padding: 1rem;
-        text-align: left;
+        text-align: center;
         font-size: 0.8rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        vertical-align: middle;
     }
 
     body:not(.dark) .data-table th {
@@ -283,6 +284,13 @@
     .data-table td {
         padding: 1rem;
         font-size: 0.9rem;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    /* Kolom tanggal diminta pada (kolom ke-4) dirata-tengah */
+    .data-table td:nth-child(4) {
+        text-align: center;
     }
 
     body:not(.dark) .data-table td {
@@ -699,35 +707,35 @@
 
     <!-- Stats Mini Cards -->
     <div class="stats-grid">
-        <div class="stat-mini-card">
+        <a href="{{ route('admin.returns.index', ['status' => 'pending']) }}" class="stat-mini-card" style="text-decoration: none;">
             <div class="stat-mini-icon pending">
                 <i class="bi bi-clock-history"></i>
             </div>
             <div class="stat-mini-text">
                 <div class="stat-mini-label">Pending</div>
-                <div class="stat-mini-value">{{ $returns->where('status', 'pending')->count() }}</div>
+                <div class="stat-mini-value">{{ $stats['pending'] ?? 0 }}</div>
             </div>
-        </div>
+        </a>
 
-        <div class="stat-mini-card">
+        <a href="{{ route('admin.returns.index', ['status' => 'approved']) }}" class="stat-mini-card" style="text-decoration: none;">
             <div class="stat-mini-icon approved">
                 <i class="bi bi-check-circle"></i>
             </div>
             <div class="stat-mini-text">
                 <div class="stat-mini-label">Approved</div>
-                <div class="stat-mini-value">{{ $returns->where('status', 'approved')->count() }}</div>
+                <div class="stat-mini-value">{{ $stats['approved'] ?? 0 }}</div>
             </div>
-        </div>
+        </a>
 
-        <div class="stat-mini-card">
+        <a href="{{ route('admin.returns.index', ['late' => 1]) }}" class="stat-mini-card" style="text-decoration: none;">
             <div class="stat-mini-icon late">
                 <i class="bi bi-exclamation-triangle"></i>
             </div>
             <div class="stat-mini-text">
                 <div class="stat-mini-label">Terlambat</div>
-                <div class="stat-mini-value">{{ $returns->where('is_late', true)->count() }}</div>
+                <div class="stat-mini-value">{{ $stats['late'] ?? 0 }}</div>
             </div>
-        </div>
+        </a>
     </div>
 
     <!-- Table Card -->
@@ -753,7 +761,7 @@
                             <div style="font-weight: 600;">{{ $return->loan->book->title }}</div>
                             <div style="font-size: 0.8rem; opacity: 0.7;">{{ $return->loan->book->author }}</div>
                         </td>
-                        <td>
+                        <td style="text-align: center;">
                             <span class="status-badge {{ $return->status }}">
                                 {{ ucfirst($return->status) }}
                             </span>
@@ -773,7 +781,7 @@
                                 -
                             @endif
                         </td>
-                        <td>
+                        <td style="text-align: center;">
                             <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
                                 @if($return->status === 'pending')
                                     <button onclick="confirmApprove({{ $return->id }}, '{{ $return->loan->user->name }}', '{{ $return->loan->book->title }}')" class="action-btn approve">
@@ -807,8 +815,10 @@
         </table>
 
         @if($returns->hasPages())
-            <div class="pagination" style="padding: 1.5rem;">
-                {{ $returns->links('pagination.app') }}
+            <div style="padding: 1.5rem; text-align: center;">
+                <div class="pagination" style="display: inline-flex;">
+                    {{ $returns->links('pagination.app') }}
+                </div>
             </div>
         @endif
     </div>

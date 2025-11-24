@@ -134,11 +134,12 @@
 
     .data-table th {
         padding: 1rem;
-        text-align: left;
+        text-align: center;
         font-size: 0.8rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        vertical-align: middle;
     }
 
     body:not(.dark) .data-table th {
@@ -173,6 +174,15 @@
     .data-table td {
         padding: 1rem;
         font-size: 0.9rem;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    /* Kolom tanggal (Pinjam, Jatuh Tempo, Kembali) dirata-tengah */
+    .data-table td:nth-child(3),
+    .data-table td:nth-child(4),
+    .data-table td:nth-child(5) {
+        text-align: center;
     }
 
     body:not(.dark) .data-table td {
@@ -707,7 +717,7 @@
                                 {{ $loan->book->author }}
                             </div>
                         </td>
-                        <td>
+                        <td style="text-align: center;">
                             <span class="status-badge {{ $status }}">
                                 <i class="bi {{ $icon }}"></i>
                                 {{ $label }}
@@ -722,7 +732,7 @@
                         <td>{{ optional($loan->borrowed_at)->format('d/m/Y') ?? '-' }}</td>
                         <td>{{ optional($loan->due_at)->format('d/m/Y') ?? '-' }}</td>
                         <td>{{ optional($loan->returned_at)->format('d/m/Y') ?? '-' }}</td>
-                        <td>
+                        <td style="text-align: center;">
                             <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
                                 @if($loan->status === 'approved' && ! $loan->returnRequest)
                                     <button 
@@ -760,8 +770,10 @@
         </table>
 
         @if($loans->hasPages())
-            <div class="pagination" style="padding: 1.5rem;">
-                {{ $loans->links('pagination.app') }}
+            <div style="padding: 1.5rem; text-align: center;">
+                <div class="pagination" style="display: inline-flex;">
+                    {{ $loans->links('pagination.app') }}
+                </div>
             </div>
         @endif
     </div>

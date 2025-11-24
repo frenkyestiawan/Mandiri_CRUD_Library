@@ -277,11 +277,12 @@
 
     .data-table th {
         padding: 1rem;
-        text-align: left;
+        text-align: center;
         font-size: 0.8rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        vertical-align: middle;
     }
 
     body:not(.dark) .data-table th {
@@ -316,6 +317,14 @@
     .data-table td {
         padding: 1rem;
         font-size: 0.9rem;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    /* Kolom kategori & stok dirata-tengah agar tampak lebih rapi */
+    .data-table td:nth-child(3),
+    .data-table td:nth-child(4) {
+        text-align: center;
     }
 
     body:not(.dark) .data-table td {
@@ -392,6 +401,18 @@
     body.dark .stock-badge.low {
         background: rgba(248, 113, 113, 0.15);
         color: #f87171;
+    }
+
+    /* Badge kategori di kolom kategori agar lebih rapi dan konsisten (sama seperti admin) */
+    .category-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: rgba(59, 130, 246, 0.12);
+        color: #3b82f6;
+        white-space: nowrap;
     }
 
     /* Action Buttons */
@@ -768,7 +789,7 @@
                         </td>
                         <td>{{ $book->author }}</td>
                         <td>
-                            <span style="padding: 0.25rem 0.75rem; background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                            <span class="category-badge">
                                 {{ $book->category }}
                             </span>
                         </td>
@@ -781,12 +802,12 @@
                                 <span class="stock-badge low">0 unit</span>
                             @endif
                         </td>
-                        <td>
+                        <td style="text-align: center;">
                             <span class="status-badge {{ $status }}">
                                 {{ $statusText }}
                             </span>
                         </td>
-                        <td>
+                        <td style="text-align: center;">
                             <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
                                 <a href="{{ route('member.books.show', $book) }}" class="action-btn view">
                                     <i class="bi bi-eye"></i>
@@ -821,8 +842,10 @@
         </table>
 
         @if($books->hasPages())
-            <div class="pagination" style="padding: 1.5rem;">
-                {{ $books->links('pagination.app') }}
+            <div style="padding: 1.5rem; text-align: center;">
+                <div class="pagination" style="display: inline-flex;">
+                    {{ $books->links('pagination.app') }}
+                </div>
             </div>
         @endif
     </div>

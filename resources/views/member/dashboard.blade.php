@@ -388,11 +388,12 @@
 
     .data-table th {
         padding: 0.875rem;
-        text-align: left;
+        text-align: center;
         font-size: 0.8rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        vertical-align: middle;
     }
 
     body:not(.dark) .data-table th {
@@ -427,6 +428,22 @@
     .data-table td {
         padding: 0.875rem;
         font-size: 0.9rem;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    /* Kolom tanggal di tabel dashboard (Pinjam, Jatuh Tempo, Kembali) dirata-tengah */
+    /* Tabel pertama: Buku | Status | Pinjam | Jatuh Tempo | Kembali */
+    .data-table:nth-of-type(1) td:nth-child(3),
+    .data-table:nth-of-type(1) td:nth-child(4),
+    .data-table:nth-of-type(1) td:nth-child(5) {
+        text-align: center;
+    }
+
+    /* Tabel kedua: Buku | Status | Pinjam | Jatuh Tempo */
+    .data-table:nth-of-type(2) td:nth-child(3),
+    .data-table:nth-of-type(2) td:nth-child(4) {
+        text-align: center;
     }
 
     body:not(.dark) .data-table td {
@@ -598,7 +615,7 @@
         </h3>
         <ul class="recommendation-list">
             @forelse($recommendedBooks as $book)
-                <li class="recommendation-item">
+                <li class="recommendation-item" onclick="window.location='{{ route('member.books.show', $book) }}'">
                     <div class="recommendation-icon">
                         <i class="bi bi-book"></i>
                     </div>
@@ -641,7 +658,7 @@
                 @forelse($myLoans as $loan)
                     <tr>
                         <td>{{ $loan->book->title }}</td>
-                        <td>
+                        <td style="text-align: center;">
                             @php
                                 $status = $loan->status;
                                 $label = match($status) {

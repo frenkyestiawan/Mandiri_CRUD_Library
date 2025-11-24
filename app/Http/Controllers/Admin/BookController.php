@@ -52,7 +52,18 @@ class BookController extends Controller
 
         $books = $query->paginate(10)->withQueryString();
 
-        $categories = ['Komik', 'Novel', 'Buku Anak', 'Ensiklopedia', 'Lainnya'];
+        $categories = [
+            'Fiksi',
+            'Non-Fiksi',
+            'Pendidikan / Akademik',
+            'Teknologi & Komputer',
+            'Bisnis & Ekonomi',
+            'Seni & Desain',
+            'Kesehatan & Kedokteran',
+            'Agama',
+            'Anak & Remaja',
+            'Sejarah & Budaya',
+        ];
 
         return view('admin.books.index', compact('books', 'categories', 'category', 'sort', 'search'));
     }

@@ -275,11 +275,12 @@
 
     .data-table th {
         padding: 1rem;
-        text-align: left;
+        text-align: center;
         font-size: 0.8rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        vertical-align: middle;
     }
 
     body:not(.dark) .data-table th {
@@ -314,6 +315,28 @@
     .data-table td {
         padding: 1rem;
         font-size: 0.9rem;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    /* Kolom teks utama tetap rata kiri (Judul, Penulis, Penerbit) */
+    .data-table td:nth-child(1),
+    .data-table td:nth-child(2),
+    .data-table td:nth-child(3) {
+        text-align: left;
+    }
+
+    /* Kolom Kategori, Stok, Tahun, Aksi dirata-tengah agar lebih rapi */
+    .data-table td:nth-child(4),
+    .data-table td:nth-child(5),
+    .data-table td:nth-child(6),
+    .data-table td:nth-child(7) {
+        text-align: center;
+    }
+
+    /* Sedikit jarak antara judul buku dan teks tambahan (misal ISBN) */
+    .data-table td:nth-child(1) > div:first-child {
+        margin-bottom: 0.25rem;
     }
 
     body:not(.dark) .data-table td {
@@ -439,6 +462,18 @@
     body.dark .stock-badge.low {
         background: rgba(248, 113, 113, 0.15);
         color: #f87171;
+    }
+
+    /* Badge kategori di kolom kategori agar lebih rapi dan konsisten */
+    .category-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: rgba(37, 99, 235, 0.12);
+        color: #2563eb;
+        white-space: nowrap;
     }
 
     /* Modal */
@@ -738,7 +773,7 @@
                         <td>{{ $book->author }}</td>
                         <td>{{ $book->publisher ?? '-' }}</td>
                         <td>
-                            <span style="padding: 0.25rem 0.75rem; background: rgba(37, 99, 235, 0.1); color: #2563eb; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                            <span class="category-badge">
                                 {{ $book->category }}
                             </span>
                         </td>

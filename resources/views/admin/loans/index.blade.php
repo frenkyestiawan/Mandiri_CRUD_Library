@@ -254,11 +254,12 @@
 
     .data-table th {
         padding: 1rem;
-        text-align: left;
+        text-align: center;
         font-size: 0.8rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        vertical-align: middle;
     }
 
     body:not(.dark) .data-table th {
@@ -293,6 +294,14 @@
     .data-table td {
         padding: 1rem;
         font-size: 0.9rem;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    /* Kolom tanggal pinjam & jatuh tempo dirata-tengah agar lebih rapi */
+    .data-table td:nth-child(4),
+    .data-table td:nth-child(5) {
+        text-align: center;
     }
 
     body:not(.dark) .data-table td {
@@ -717,45 +726,45 @@
 
     <!-- Stats Mini Cards -->
     <div class="stats-grid">
-        <div class="stat-mini-card">
+        <a href="{{ route('admin.loans.index', ['status' => 'pending']) }}" class="stat-mini-card" style="text-decoration: none;">
             <div class="stat-mini-icon pending">
                 <i class="bi bi-hourglass-split"></i>
             </div>
             <div class="stat-mini-text">
                 <div class="stat-mini-label">Pending</div>
-                <div class="stat-mini-value">{{ $loans->where('status', 'pending')->count() }}</div>
+                <div class="stat-mini-value">{{ $stats['pending'] ?? 0 }}</div>
             </div>
-        </div>
+        </a>
 
-        <div class="stat-mini-card">
+        <a href="{{ route('admin.loans.index', ['status' => 'approved']) }}" class="stat-mini-card" style="text-decoration: none;">
             <div class="stat-mini-icon approved">
                 <i class="bi bi-check-circle"></i>
             </div>
             <div class="stat-mini-text">
                 <div class="stat-mini-label">Approved</div>
-                <div class="stat-mini-value">{{ $loans->where('status', 'approved')->count() }}</div>
+                <div class="stat-mini-value">{{ $stats['approved'] ?? 0 }}</div>
             </div>
-        </div>
+        </a>
 
-        <div class="stat-mini-card">
+        <a href="{{ route('admin.loans.index', ['late' => 1]) }}" class="stat-mini-card" style="text-decoration: none;">
             <div class="stat-mini-icon late">
                 <i class="bi bi-exclamation-triangle"></i>
             </div>
             <div class="stat-mini-text">
                 <div class="stat-mini-label">Terlambat</div>
-                <div class="stat-mini-value">{{ $loans->where('is_late', true)->count() }}</div>
+                <div class="stat-mini-value">{{ $stats['late'] ?? 0 }}</div>
             </div>
-        </div>
+        </a>
 
-        <div class="stat-mini-card">
+        <a href="{{ route('admin.loans.index', ['status' => 'returned']) }}" class="stat-mini-card" style="text-decoration: none;">
             <div class="stat-mini-icon returned">
                 <i class="bi bi-arrow-repeat"></i>
             </div>
             <div class="stat-mini-text">
                 <div class="stat-mini-label">Returned</div>
-                <div class="stat-mini-value">{{ $loans->where('status', 'returned')->count() }}</div>
+                <div class="stat-mini-value">{{ $stats['returned'] ?? 0 }}</div>
             </div>
-        </div>
+        </a>
     </div>
 
     <!-- Table Card -->
@@ -783,7 +792,7 @@
                             <div style="font-size: 0.8rem; opacity: 0.7;">{{ $loan->book->author }}</div>
                             <div style="font-size: 0.8rem; opacity: 0.7;">Penerbit: {{ $loan->book->publisher ?? '-' }}</div>
                         </td>
-                        <td>
+                        <td style="text-align: center;">
                             <span class="status-badge {{ $loan->status }}">
                                 {{ ucfirst($loan->status) }}
                             </span>
@@ -806,7 +815,7 @@
                                 -
                             @endif
                         </td>
-                        <td>
+                        <td style="text-align: center;">
                             <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
                                 <a href="{{ route('admin.loans.show', $loan) }}" class="action-btn view">
                                     <i class="bi bi-eye"></i>

@@ -5,13 +5,40 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Loan;
 use Illuminate\Support\Carbon;
+use Illuminate\Http\Request;
 
 class LoanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $loans = Loan::with(['user', 'book'])->latest()->paginate(10);
-        return view('admin.loans.index', compact('loans'));
+        $status = $request->input('status');
+        $lateOnly = $request->boolean('late');
+
+        $query = Loan::with(['user', 'book'])->latest();
+
+        if (!empty($status)) {
+            $query->where('status', $status);
+        }
+
+        if ($lateOnly) {
+            $query->where('is_late', true);
+        }
+
+        $loans = $query->paginate(10)->withQueryString();
+
+        $stats = [
+            'pending' => Loan::where('status', 'pending')->count(),
+            'approved' => Loan::where('status', 'approved')->count(),
+            'late' => Loan::where('is_late', true)->count(),
+            'returned' => Loan::where('status', 'returned')->count(),
+        ];
+
+        return view('admin.loans.index', [
+            'loans' => $loans,
+            'stats' => $stats,
+            'status' => $status,
+            'lateOnly' => $lateOnly,
+        ]);
     }
 
     public function show(Loan $loan)

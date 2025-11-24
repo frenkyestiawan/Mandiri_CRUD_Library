@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->string('title');
             $table->string('author');
             $table->string('category')->nullable();
-            $table->string('publisher');
+            $table->string('publisher')->nullable();
             $table->integer('stock')->default(0);
             $table->year('published_year')->nullable();
             $table->text('description')->nullable();

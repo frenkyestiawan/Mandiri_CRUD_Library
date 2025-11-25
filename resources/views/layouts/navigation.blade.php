@@ -181,7 +181,7 @@
                     <!-- Auth buttons for guests -->
                     <a href="{{ route('login') }}" class="btn btn-outline">
                         <i class="bi bi-box-arrow-in-right"></i>
-                        Masuk
+                        Login
                     </a>
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}" class="btn btn-primary">

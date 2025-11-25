@@ -1,52 +1,214 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+@extends('layouts.app')
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+@section('title', config('app.name', 'E-PERPUS') . ' - Register')
+
+@push('styles')
+<style>
+    @import url('/css/authentication/register.css');
+</style>
+@endpush
+
+@section('content')
+    <div id="register-wrapper">
+        <div class="register-card">
+            <div class="register-header">
+                <div class="library-icon">
+                    <i class="bi bi-person-plus-fill"></i>
+                </div>
+                <div class="register-title">{{ __('Daftar Akun') }}</div>
+                <div class="register-subtitle">{{ __('Buat akun baru untuk mengakses perpustakaan digital') }}</div>
+            </div>
+
+            <form method="POST" action="{{ route('register') }}" autocomplete="off">
+                @csrf
+
+                <!-- Name -->
+                <div class="form-group">
+                    <label for="name" class="form-label">
+                        <i class="bi bi-person"></i>
+                        {{ __('Nama Lengkap') }}
+                    </label>
+                    <div class="input-wrapper">
+                        <div class="input-icon"><i class="bi bi-person-fill"></i></div>
+                        <input 
+                            id="name" 
+                            type="text" 
+                            class="form-control @error('name') is-invalid @enderror" 
+                            name="name" 
+                            value="{{ old('name') }}" 
+                            required 
+                            autofocus
+                            autocomplete="name" 
+                            placeholder="Masukkan nama lengkap"
+                        >
+                    </div>
+                    @error('name')
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                <!-- Email Address -->
+                <div class="form-group">
+                    <label for="email" class="form-label">
+                        <i class="bi bi-envelope"></i>
+                        {{ __('Email') }}
+                    </label>
+                    <div class="input-wrapper">
+                        <div class="input-icon"><i class="bi bi-envelope-fill"></i></div>
+                        <input 
+                            id="email" 
+                            type="email" 
+                            class="form-control @error('email') is-invalid @enderror" 
+                            name="email" 
+                            value="{{ old('email') }}" 
+                            required
+                            autocomplete="username" 
+                            placeholder="Masukkan alamat email"
+                        >
+                    </div>
+                    @error('email')
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        <i class="bi bi-lock"></i>
+                        {{ __('Password') }}
+                    </label>
+                    <div class="input-wrapper">
+                        <div class="input-icon"><i class="bi bi-lock-fill"></i></div>
+                        <input 
+                            id="password" 
+                            type="password" 
+                            class="form-control @error('password') is-invalid @enderror" 
+                            name="password" 
+                            required 
+                            autocomplete="new-password"
+                            placeholder="Minimal 8 karakter"
+                        >
+                        <button type="button" class="password-toggle" onclick="togglePassword('password','toggleIcon1')">
+                            <i class="bi bi-eye-slash-fill" id="toggleIcon1"></i>
+                        </button>
+                    </div>
+                    @error('password')
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="password_confirmation" class="form-label">
+                        <i class="bi bi-shield-check"></i>
+                        {{ __('Konfirmasi Password') }}
+                    </label>
+                    <div class="input-wrapper">
+                        <div class="input-icon"><i class="bi bi-shield-fill-check"></i></div>
+                        <input 
+                            id="password_confirmation" 
+                            type="password" 
+                            class="form-control @error('password_confirmation') is-invalid @enderror" 
+                            name="password_confirmation" 
+                            required 
+                            autocomplete="new-password"
+                            placeholder="Ulangi password"
+                        >
+                        <button type="button" class="password-toggle" onclick="togglePassword('password_confirmation','toggleIcon2')">
+                            <i class="bi bi-eye-slash-fill" id="toggleIcon2"></i>
+                        </button>
+                    </div>
+                    @error('password_confirmation')
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                <!-- Terms & Conditions -->
+                <div class="form-terms">
+                    <div class="form-check">
+                        <input 
+                            class="form-check-input" 
+                            type="checkbox" 
+                            name="terms" 
+                            id="terms"
+                            required
+                        >
+                        <label class="form-check-label" for="terms">
+                            Saya menyetujui <a href="#" class="terms-link">syarat dan ketentuan</a> yang berlaku
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-register">
+                    <i class="bi bi-person-plus"></i>
+                    {{ __('Register') }}
+                </button>
+
+                <!-- Login Link -->
+                <div class="login-link">
+                    <small>Sudah punya akun? <a href="{{ route('login') }}">Masuk di sini</a></small>
+                </div>
+            </form>
         </div>
+    </div>
+@endsection
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+@push('styles')
+<style>
+    @import url('/css/authentication/register.css');
+</style>
+@endpush
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+@push('scripts')
+<script>
+    function togglePassword(fieldId, iconId){
+        var f = document.getElementById(fieldId);
+        var i = document.getElementById(iconId);
+        if(!f) return;
+        if(f.type === 'password'){
+            f.type = 'text';
+            if(i) i.className = 'bi bi-eye-fill';
+        } else {
+            f.type = 'password';
+            if(i) i.className = 'bi bi-eye-slash-fill';
+        }
+    }
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+    // Password strength indicator (optional)
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.getElementById('password');
+        const confirmInput = document.getElementById('password_confirmation');
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+        if (passwordInput && confirmInput) {
+            confirmInput.addEventListener('input', function() {
+                if (this.value && passwordInput.value !== this.value) {
+                    this.setCustomValidity('Password tidak cocok');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+            passwordInput.addEventListener('input', function() {
+                if (confirmInput.value && this.value !== confirmInput.value) {
+                    confirmInput.setCustomValidity('Password tidak cocok');
+                } else {
+                    confirmInput.setCustomValidity('');
+                }
+            });
+        }
+    });
+</script>
+@endpush

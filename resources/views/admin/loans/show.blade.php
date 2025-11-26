@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-    @import url('/css/admin/loan/show_loan.css');
+@import url("{{ asset('css/admin/loan/show_loan.css') }}");
 </style>
 @endpush
 
@@ -130,16 +130,16 @@
         <div class="info-section">
             <h3 class="section-title">
                 <span class="section-icon">
-                    <i class="bi bi-exclamation-triangle"></i>
+                    <i class="bi bi-clock-fill"></i>
                 </span>
                 Status Keterlambatan
             </h3>
             
             @if($loan->is_late)
                 <div class="late-badge">
-                    <i class="bi bi-exclamation-circle-fill"></i>
+                    <i class="bi bi-clock-fill"></i>
                     <div>
-                        <div style="font-weight: 700;">Terlambat!</div>
+                        <div style="font-weight: 700;">Late!</div>
                         @if($loan->penalty_note)
                             <div style="font-size: 0.9rem; margin-top: 0.25rem;">
                                 {{ $loan->penalty_note }}
@@ -183,7 +183,7 @@
         <div class="modal-header">
             <h3 class="modal-title">
                 <i class="bi bi-check-circle-fill" style="color: #10b981;"></i>
-                Konfirmasi Approve
+                Approve Confirmation
             </h3>
             <button class="modal-close" onclick="closeApproveModal()">
                 <i class="bi bi-x-lg"></i>
@@ -191,18 +191,18 @@
         </div>
         <div class="modal-body">
             <p class="modal-text">
-                Apakah Anda yakin ingin meng-approve peminjaman buku <strong>{{ $loan->book->title }}</strong> untuk <strong>{{ $loan->user->name }}</strong>?
+                Are you sure you want to approve the loan of book <strong>{{ $loan->book->title }}</strong> for <strong>{{ $loan->user->name }}</strong>?
             </p>
             <form action="{{ route('admin.loans.approve', $loan) }}" method="POST">
                 @csrf
                 <div class="modal-actions">
                     <button type="button" onclick="closeApproveModal()" class="btn btn-secondary">
                         <i class="bi bi-x-circle"></i>
-                        Batal
+                        Cancel
                     </button>
                     <button type="submit" class="btn btn-success">
                         <i class="bi bi-check-circle"></i>
-                        Ya, Approve
+                        Yes, Approve
                     </button>
                 </div>
             </form>
@@ -217,7 +217,7 @@
         <div class="modal-header">
             <h3 class="modal-title">
                 <i class="bi bi-x-circle-fill" style="color: #ef4444;"></i>
-                Konfirmasi Reject
+                Reject Confirmation
             </h3>
             <button class="modal-close" onclick="closeRejectModal()">
                 <i class="bi bi-x-lg"></i>
@@ -225,18 +225,18 @@
         </div>
         <div class="modal-body">
             <p class="modal-text">
-                Apakah Anda yakin ingin me-reject peminjaman buku <strong>{{ $loan->book->title }}</strong> untuk <strong>{{ $loan->user->name }}</strong>?
+                Are you sure you want to reject the loan of book <strong>{{ $loan->book->title }}</strong> for <strong>{{ $loan->user->name }}</strong>?
             </p>
             <form action="{{ route('admin.loans.reject', $loan) }}" method="POST">
                 @csrf
                 <div class="modal-actions">
                     <button type="button" onclick="closeRejectModal()" class="btn btn-secondary">
                         <i class="bi bi-x-circle"></i>
-                        Batal
+                        Cancel
                     </button>
                     <button type="submit" class="btn btn-danger">
                         <i class="bi bi-x-circle"></i>
-                        Ya, Reject
+                        Yes, Reject
                     </button>
                 </div>
             </form>
@@ -246,33 +246,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    function confirmApprove() {
-        document.getElementById('approveOverlay').classList.add('active');
-        document.getElementById('approveModal').classList.add('active');
-    }
-
-    function closeApproveModal() {
-        document.getElementById('approveOverlay').classList.remove('active');
-        document.getElementById('approveModal').classList.remove('active');
-    }
-
-    function confirmReject() {
-        document.getElementById('rejectOverlay').classList.add('active');
-        document.getElementById('rejectModal').classList.add('active');
-    }
-
-    function closeRejectModal() {
-        document.getElementById('rejectOverlay').classList.remove('active');
-        document.getElementById('rejectModal').classList.remove('active');
-    }
-
-    // Close modals with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeApproveModal();
-            closeRejectModal();
-        }
-    });
-</script>
+<script src="{{ asset('js/admin/loans/show_loan.js') }}"></script>
 @endpush

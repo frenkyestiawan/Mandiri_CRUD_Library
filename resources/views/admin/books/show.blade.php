@@ -4,8 +4,7 @@
 
 @push('styles')
 <style>
-    /* Page Header */
-    @import url('/css/admin/book/show_book.css');
+@import url("{{ asset('css/admin/book/show_book.css') }}");
 </style>
 @endpush
 
@@ -153,7 +152,7 @@
         <div class="modal-header">
             <h3 class="modal-title">
                 <i class="bi bi-exclamation-triangle-fill" style="color: #ef4444;"></i>
-                Konfirmasi Hapus Buku
+                Delete Book Confirmation
             </h3>
             <button class="modal-close" onclick="closeDeleteModal()">
                 <i class="bi bi-x-lg"></i>
@@ -161,8 +160,8 @@
         </div>
         <div class="modal-body">
             <p class="modal-text">
-                Apakah Anda yakin ingin menghapus buku <strong>{{ $book->title }}</strong>? 
-                Tindakan ini tidak dapat dibatalkan dan semua data peminjaman terkait akan terpengaruh.
+                Are you sure you want to delete the book <strong>{{ $book->title }}</strong>? 
+                This action cannot be undone and all related loan data will be affected.
             </p>
             <form action="{{ route('admin.books.destroy', $book) }}" method="POST">
                 @csrf
@@ -170,11 +169,11 @@
                 <div class="modal-actions">
                     <button type="button" onclick="closeDeleteModal()" class="btn btn-secondary">
                         <i class="bi bi-x-circle"></i>
-                        Batal
+                        Cancel
                     </button>
                     <button type="submit" class="btn btn-danger">
                         <i class="bi bi-trash"></i>
-                        Ya, Hapus Buku
+                        Yes, Delete Book
                     </button>
                 </div>
             </form>
@@ -184,33 +183,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    function showCoverModal() {
-        document.getElementById('coverOverlay').classList.add('active');
-        document.getElementById('coverModal').classList.add('active');
-    }
-
-    function closeCoverModal() {
-        document.getElementById('coverOverlay').classList.remove('active');
-        document.getElementById('coverModal').classList.remove('active');
-    }
-
-    function confirmDelete() {
-        document.getElementById('deleteOverlay').classList.add('active');
-        document.getElementById('deleteModal').classList.add('active');
-    }
-
-    function closeDeleteModal() {
-        document.getElementById('deleteOverlay').classList.remove('active');
-        document.getElementById('deleteModal').classList.remove('active');
-    }
-
-    // Close modals with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeCoverModal();
-            closeDeleteModal();
-        }
-    });
-</script>
+<script src="{{ asset('js/admin/books/show_book.js') }}"></script>
 @endpush

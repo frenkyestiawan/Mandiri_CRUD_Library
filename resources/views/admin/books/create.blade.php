@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-  @import url('/css/admin/book/create_book.css');
+@import url("{{ asset('css/admin/book/create_book.css') }}");
 </style>
 @endpush
 
@@ -308,18 +308,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    function previewCover(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('coverPreview').src = e.target.result;
-                document.getElementById('coverPreviewContainer').style.display = 'block';
-                document.getElementById('coverPlaceholder').style.display = 'none';
-            }
-            reader.readAsDataURL(file);
-        }
-    }
-</script>
+<script src="{{ asset('js/admin/books/create_book.js') }}"></script>
 @endpush

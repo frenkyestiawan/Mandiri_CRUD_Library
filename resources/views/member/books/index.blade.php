@@ -102,7 +102,7 @@
                 @forelse($books as $book)
                     @php
                         $status = $book->stock > 0 ? 'available' : 'unavailable';
-                        $statusText = $book->stock > 0 ? 'Tersedia' : 'Sedang Dipinjam';
+                        $statusText = $book->stock > 0 ? 'Available' : 'Currently Borrowed';
                         $stockClass = 'high';
                         if($book->stock < 5 && $book->stock > 0) $stockClass = 'low';
                         elseif($book->stock >= 5 && $book->stock < 10) $stockClass = 'medium';
@@ -148,7 +148,7 @@
                                 @else
                                     <button class="action-btn disabled" disabled>
                                         <i class="bi bi-x-circle"></i>
-                                        Tidak Tersedia
+                                        Not Available
                                     </button>
                                 @endif
                             </div>
@@ -186,7 +186,7 @@
         <div class="modal-header">
             <h3 class="modal-title">
                 <i class="bi bi-bookmark-plus-fill" style="color: #10b981;"></i>
-                Konfirmasi Peminjaman
+                Borrow Confirmation
             </h3>
             <button class="modal-close" onclick="closeBorrowModal()">
                 <i class="bi bi-x-lg"></i>
@@ -194,9 +194,9 @@
         </div>
         <div class="modal-body">
             <p class="modal-text">
-                Apakah Anda yakin ingin meminjam buku <strong id="borrowBookTitle"></strong>?
+                Are you sure you want to borrow the book <strong id="borrowBookTitle"></strong>?
                 <br><br>
-                Permintaan peminjaman akan diajukan dan menunggu persetujuan admin.
+                Your loan request will be submitted and wait for admin approval.
             </p>
             <form id="borrowForm" method="POST" action="{{ route('member.loans.store') }}">
                 @csrf
@@ -204,11 +204,11 @@
                 <div class="modal-actions">
                     <button type="button" onclick="closeBorrowModal()" class="btn btn-secondary">
                         <i class="bi bi-x-circle"></i>
-                        Batal
+                        Cancel
                     </button>
                     <button type="submit" class="btn btn-success">
                         <i class="bi bi-check-circle"></i>
-                        Ya, Pinjam Buku
+                        Yes, Borrow Book
                     </button>
                 </div>
             </form>
@@ -218,24 +218,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    function confirmBorrow(bookId, bookTitle) {
-        document.getElementById('borrowBookTitle').textContent = bookTitle;
-        document.getElementById('borrowBookId').value = bookId;
-        document.getElementById('borrowOverlay').classList.add('active');
-        document.getElementById('borrowModal').classList.add('active');
-    }
-
-    function closeBorrowModal() {
-        document.getElementById('borrowOverlay').classList.remove('active');
-        document.getElementById('borrowModal').classList.remove('active');
-    }
-
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeBorrowModal();
-        }
-    });
-</script>
+<script src="{{ asset('js/anggota/book/index_book.js') }}"></script>
 @endpush

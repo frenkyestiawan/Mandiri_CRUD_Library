@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-@import url("css/anggota/loan/index.loan.css");
+@import url("{{ asset('css/anggota/loan/index.loan.css') }}");
 </style>
 @endpush
 
@@ -54,10 +54,10 @@
                     @php
                         $status = $loan->status;
                         $label = match($status) {
-                            'pending' => 'Menunggu persetujuan',
-                            'approved' => 'Sedang dipinjam',
-                            'returned' => 'Selesai',
-                            'rejected' => 'Ditolak',
+                            'pending' => 'Pending Approval',
+                            'approved' => 'Currently Borrowed',
+                            'returned' => 'Completed',
+                            'rejected' => 'Rejected',
                             default => ucfirst($status),
                         };
                         $icon = match($status) {
@@ -82,8 +82,8 @@
                             </span>
                             @if($loan->is_late)
                                 <span class="status-badge late">
-                                    <i class="bi bi-exclamation-triangle"></i>
-                                    Terlambat
+                                    <i class="bi bi-clock-fill"></i>
+                                    Late
                                 </span>
                             @endif
                         </td>
@@ -97,17 +97,17 @@
                                         onclick="confirmReturn({{ $loan->id }}, '{{ $loan->book->title }}', '{{ optional($loan->borrowed_at)->format('d/m/Y') }}', '{{ optional($loan->due_at)->format('d/m/Y') }}', {{ $loan->is_late ? 'true' : 'false' }})" 
                                         class="action-btn return">
                                         <i class="bi bi-arrow-return-left"></i>
-                                        Ajukan Pengembalian
+                                        Request Return
                                     </button>
                                 @elseif($loan->returnRequest && $loan->returnRequest->status === 'pending')
                                     <span class="action-text pending">
                                         <i class="bi bi-clock-history"></i>
-                                        Menunggu persetujuan pengembalian
+                                        Waiting for return approval
                                     </span>
                                 @elseif($loan->status === 'returned')
                                     <span class="action-text success">
                                         <i class="bi bi-check-circle-fill"></i>
-                                        Selesai
+                                        Completed
                                     </span>
                                 @endif
                             </div>
@@ -145,7 +145,7 @@
         <div class="modal-header">
             <h3 class="modal-title">
                 <i class="bi bi-arrow-return-left" style="color: #3b82f6;"></i>
-                Ajukan Pengembalian
+                Return Request
             </h3>
             <button class="modal-close" onclick="closeReturnModal()">
                 <i class="bi bi-x-lg"></i>
@@ -153,25 +153,25 @@
         </div>
         <div class="modal-body">
             <p style="margin-bottom: 1.5rem; color: var(--text-muted); font-size: 0.95rem;">
-                Pastikan informasi peminjaman berikut sudah benar sebelum mengajukan pengembalian.
+                Please make sure the following loan information is correct before submitting a return request.
             </p>
             
             <div class="modal-info">
                 <div class="info-item">
                     <span class="info-label">
-                        <i class="bi bi-book"></i> Judul Buku
+                        <i class="bi bi-book"></i> Book Title
                     </span>
                     <span class="info-value" id="returnBookTitle"></span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">
-                        <i class="bi bi-calendar-check"></i> Tanggal Pinjam
+                        <i class="bi bi-calendar-check"></i> Borrowed At
                     </span>
                     <span class="info-value" id="returnBorrowedAt"></span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">
-                        <i class="bi bi-calendar-x"></i> Jatuh Tempo
+                        <i class="bi bi-calendar-x"></i> Due Date
                     </span>
                     <span class="info-value" id="returnDueAt"></span>
                 </div>
@@ -180,14 +180,14 @@
                         <i class="bi bi-exclamation-triangle"></i> Status
                     </span>
                     <span class="info-value" style="color: #ef4444; font-weight: 600;">
-                        Terlambat
+                        Late
                     </span>
                 </div>
             </div>
 
             <div class="modal-warning">
                 <i class="bi bi-info-circle"></i>
-                <p>Setelah Anda mengajukan pengembalian, admin akan memverifikasi dan menyetujui pengembalian buku Anda.</p>
+                <p>After you submit a return request, the admin will verify and approve your book return.</p>
             </div>
 
             <form id="returnForm" method="POST" action="{{ route('member.loans.return-request', ':id') }}">
@@ -195,11 +195,11 @@
                 <div class="modal-actions">
                     <button type="button" onclick="closeReturnModal()" class="btn btn-secondary">
                         <i class="bi bi-x-circle"></i>
-                        Batal
+                        Cancel
                     </button>
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-check-circle"></i>
-                        Ajukan Pengembalian
+                        Submit Return Request
                     </button>
                 </div>
             </form>
@@ -209,39 +209,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    function confirmReturn(loanId, bookTitle, borrowedAt, dueAt, isLate) {
-        document.getElementById('returnBookTitle').textContent = bookTitle;
-        document.getElementById('returnBorrowedAt').textContent = borrowedAt;
-        document.getElementById('returnDueAt').textContent = dueAt;
-        
-        // Show late status if applicable
-        const lateItem = document.getElementById('lateStatusItem');
-        if (isLate) {
-            lateItem.style.display = 'flex';
-        } else {
-            lateItem.style.display = 'none';
-        }
-        
-        // Update form action URL
-        const form = document.getElementById('returnForm');
-        form.action = form.action.replace(':id', loanId);
-        
-        // Show modal
-        document.getElementById('returnOverlay').classList.add('active');
-        document.getElementById('returnModal').classList.add('active');
-    }
-
-    function closeReturnModal() {
-        document.getElementById('returnOverlay').classList.remove('active');
-        document.getElementById('returnModal').classList.remove('active');
-    }
-
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeReturnModal();
-        }
-    });
-</script>
+<script src="{{ asset('js/anggota/loan/index_loan.js') }}"></script>
 @endpush

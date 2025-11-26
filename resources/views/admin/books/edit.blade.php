@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-  @import url('/css/admin/book/edit_book.css');
+@import url("{{ asset('css/admin/book/edit_book.css') }}");
 </style>
 @endpush
 
@@ -327,7 +327,7 @@
         <div class="modal-header">
             <h3 class="modal-title">
                 <i class="bi bi-exclamation-triangle-fill" style="color: #ef4444;"></i>
-                Konfirmasi Hapus Cover
+                Remove Cover Confirmation
             </h3>
             <button class="modal-close" onclick="closeRemoveCoverModal()">
                 <i class="bi bi-x-lg"></i>
@@ -335,16 +335,16 @@
         </div>
         <div class="modal-body">
             <p class="modal-text">
-                Apakah Anda yakin ingin menghapus cover buku ini? Cover akan dihapus setelah Anda menyimpan perubahan.
+                Are you sure you want to remove this book cover? The cover will be removed after you save the changes.
             </p>
             <div class="modal-actions">
                 <button type="button" onclick="closeRemoveCoverModal()" class="btn btn-secondary">
                     <i class="bi bi-x-circle"></i>
-                    Batal
+                    Cancel
                 </button>
                 <button type="button" onclick="removeCover()" class="btn btn-danger">
                     <i class="bi bi-trash"></i>
-                    Ya, Hapus Cover
+                    Yes, Remove Cover
                 </button>
             </div>
         </div>
@@ -353,55 +353,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    function previewCover(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('coverPreview').src = e.target.result;
-                document.getElementById('coverPreviewContainer').style.display = 'block';
-                document.getElementById('coverPlaceholder').style.display = 'none';
-                // Reset remove cover flag if new image is selected
-                document.getElementById('remove_cover').value = '0';
-            }
-            reader.readAsDataURL(file);
-        }
-    }
-
-    function confirmRemoveCover() {
-        document.getElementById('removeCoverOverlay').classList.add('active');
-        document.getElementById('removeCoverModal').classList.add('active');
-    }
-
-    function closeRemoveCoverModal() {
-        document.getElementById('removeCoverOverlay').classList.remove('active');
-        document.getElementById('removeCoverModal').classList.remove('active');
-    }
-
-    function removeCover() {
-        // Hide preview and show placeholder
-        document.getElementById('coverPreviewContainer').style.display = 'none';
-        document.getElementById('coverPlaceholder').style.display = 'flex';
-        
-        // Set flag to remove cover on server
-        document.getElementById('remove_cover').value = '1';
-        
-        // Clear file input
-        document.getElementById('cover').value = '';
-        
-        // Close modal
-        closeRemoveCoverModal();
-        
-        // Show notification
-        alert('Cover akan dihapus setelah Anda menyimpan perubahan.');
-    }
-
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeRemoveCoverModal();
-        }
-    });
-</script>
+<script src="{{ asset('js/admin/books/edit_book.js') }}"></script>
 @endpush

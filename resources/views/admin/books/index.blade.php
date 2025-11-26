@@ -4,8 +4,7 @@
 
 @push('styles')
 <style>
-    /* Page Header */
-    @import url('/css/admin/book/index_book.css');
+@import url("{{ asset('css/admin/book/index_book.css') }}");
 </style>
 @endpush
 
@@ -164,14 +163,14 @@
 
 </div>
 
-<!-- Delete Confirmation Modal -->
+    <!-- Delete Confirmation Modal -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
 <div class="modal" id="deleteModal">
     <div class="modal-content">
         <div class="modal-header">
             <h3 class="modal-title">
                 <i class="bi bi-exclamation-triangle" style="color: #ef4444;"></i>
-                Konfirmasi Hapus
+                Delete Confirmation
             </h3>
             <button class="modal-close" onclick="closeModal()">
                 <i class="bi bi-x-lg"></i>
@@ -179,8 +178,8 @@
         </div>
         <div class="modal-body">
             <p class="modal-text">
-                Apakah Anda yakin ingin menghapus buku <strong id="bookTitle"></strong>? 
-                Tindakan ini tidak dapat dibatalkan.
+                Are you sure you want to delete the book <strong id="bookTitle"></strong>? 
+                This action cannot be undone.
             </p>
             <form id="deleteForm" method="POST">
                 @csrf
@@ -188,11 +187,11 @@
                 <div class="modal-actions">
                     <button type="button" onclick="closeModal()" class="btn btn-secondary">
                         <i class="bi bi-x-circle"></i>
-                        Batal
+                        Cancel
                     </button>
                     <button type="submit" class="btn btn-danger">
                         <i class="bi bi-trash"></i>
-                        Ya, Hapus
+                        Yes, Delete
                     </button>
                 </div>
             </form>
@@ -202,24 +201,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    function confirmDelete(bookId, bookTitle) {
-        document.getElementById('bookTitle').textContent = bookTitle;
-        document.getElementById('deleteForm').action = `/admin/books/${bookId}`;
-        document.getElementById('modalOverlay').classList.add('active');
-        document.getElementById('deleteModal').classList.add('active');
-    }
-
-    function closeModal() {
-        document.getElementById('modalOverlay').classList.remove('active');
-        document.getElementById('deleteModal').classList.remove('active');
-    }
-
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeModal();
-        }
-    });
-</script>
+<script src="{{ asset('js/admin/books/index_book.js') }}"></script>
 @endpush

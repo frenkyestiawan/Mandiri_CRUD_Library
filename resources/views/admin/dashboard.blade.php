@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-    @import url('/css/admin/dashboard.css');
+@import url("{{ asset('css/admin/dashboard.css') }}");
 </style>
 @endpush
 
@@ -192,17 +192,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    // Live Clock
-    function updateClock() {
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        document.getElementById('live-time').textContent = `${hours}:${minutes}:${seconds}`;
-    }
-    
-    updateClock();
-    setInterval(updateClock, 1000);
-</script>
+<script src="{{ asset('js/admin/dashboard.js') }}"></script>
 @endpush

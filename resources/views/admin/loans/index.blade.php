@@ -4,8 +4,7 @@
 
 @push('styles')
 <style>
-    /* Page Header */
-@import url('../css/admin/loan/index_loan.css');
+@import url("{{ asset('css/admin/loan/index_loan.css') }}");
 </style>
 @endpush
 
@@ -61,10 +60,10 @@
 
         <a href="{{ route('admin.loans.index', ['late' => 1]) }}" class="stat-mini-card" style="text-decoration: none;">
             <div class="stat-mini-icon late">
-                <i class="bi bi-exclamation-triangle"></i>
+                <i class="bi bi-clock-fill"></i>
             </div>
             <div class="stat-mini-text">
-                <div class="stat-mini-label">Terlambat</div>
+                <div class="stat-mini-label">Late</div>
                 <div class="stat-mini-value">{{ $stats['late'] ?? 0 }}</div>
             </div>
         </a>
@@ -111,7 +110,7 @@
                             </span>
                             @if($loan->is_late)
                                 <span class="status-badge late">
-                                    <i class="bi bi-clock-fill"></i> Terlambat
+                                    <i class="bi bi-clock-fill"></i> Late
                                 </span>
                             @endif
                         </td>
@@ -179,7 +178,7 @@
         <div class="modal-header">
             <h3 class="modal-title">
                 <i class="bi bi-check-circle-fill" style="color: #10b981;"></i>
-                Konfirmasi Approve
+                Approve Confirmation
             </h3>
             <button class="modal-close" onclick="closeApproveModal()">
                 <i class="bi bi-x-lg"></i>
@@ -187,18 +186,18 @@
         </div>
         <div class="modal-body">
             <p class="modal-text">
-                Approve peminjaman buku <strong id="approveBookTitle"></strong> untuk anggota <strong id="approveMemberName"></strong>?
+                Approve the loan of book <strong id="approveBookTitle"></strong> for member <strong id="approveMemberName"></strong>?
             </p>
             <form id="approveForm" method="POST">
                 @csrf
                 <div class="modal-actions">
                     <button type="button" onclick="closeApproveModal()" class="btn btn-secondary">
                         <i class="bi bi-x-circle"></i>
-                        Batal
+                        Cancel
                     </button>
                     <button type="submit" class="btn btn-success">
                         <i class="bi bi-check-circle"></i>
-                        Ya, Approve
+                        Yes, Approve
                     </button>
                 </div>
             </form>
@@ -213,7 +212,7 @@
         <div class="modal-header">
             <h3 class="modal-title">
                 <i class="bi bi-x-circle-fill" style="color: #ef4444;"></i>
-                Konfirmasi Reject
+                Reject Confirmation
             </h3>
             <button class="modal-close" onclick="closeRejectModal()">
                 <i class="bi bi-x-lg"></i>
@@ -221,18 +220,18 @@
         </div>
         <div class="modal-body">
             <p class="modal-text">
-                Tolak peminjaman buku <strong id="rejectBookTitle"></strong> untuk anggota <strong id="rejectMemberName"></strong>?
+                Reject the loan of book <strong id="rejectBookTitle"></strong> for member <strong id="rejectMemberName"></strong>?
             </p>
             <form id="rejectForm" method="POST">
                 @csrf
                 <div class="modal-actions">
                     <button type="button" onclick="closeRejectModal()" class="btn btn-secondary">
                         <i class="bi bi-x-circle"></i>
-                        Batal
+                        Cancel
                     </button>
                     <button type="submit" class="btn btn-danger">
                         <i class="bi bi-x-circle"></i>
-                        Ya, Reject
+                        Yes, Reject
                     </button>
                 </div>
             </form>
@@ -242,39 +241,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    function confirmApprove(loanId, memberName, bookTitle) {
-        document.getElementById('approveMemberName').textContent = memberName;
-        document.getElementById('approveBookTitle').textContent = bookTitle;
-        document.getElementById('approveForm').action = `/admin/loans/${loanId}/approve`;
-        document.getElementById('approveOverlay').classList.add('active');
-        document.getElementById('approveModal').classList.add('active');
-    }
-
-    function closeApproveModal() {
-        document.getElementById('approveOverlay').classList.remove('active');
-        document.getElementById('approveModal').classList.remove('active');
-    }
-
-    function confirmReject(loanId, memberName, bookTitle) {
-        document.getElementById('rejectMemberName').textContent = memberName;
-        document.getElementById('rejectBookTitle').textContent = bookTitle;
-        document.getElementById('rejectForm').action = `/admin/loans/${loanId}/reject`;
-        document.getElementById('rejectOverlay').classList.add('active');
-        document.getElementById('rejectModal').classList.add('active');
-    }
-
-    function closeRejectModal() {
-        document.getElementById('rejectOverlay').classList.remove('active');
-        document.getElementById('rejectModal').classList.remove('active');
-    }
-
-    // Close modals with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeApproveModal();
-            closeRejectModal();
-        }
-    });
-</script>
+<script src="{{ asset('js/admin/loans/index_loan.js') }}"></script>
 @endpush

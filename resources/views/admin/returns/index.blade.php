@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-@import url('../css/admin/returns/index_returns.css');
+@import url("{{ asset('css/admin/returns/index_returns.css') }}");
 </style>
 @endpush
 
@@ -60,10 +60,10 @@
 
         <a href="{{ route('admin.returns.index', ['late' => 1]) }}" class="stat-mini-card" style="text-decoration: none;">
             <div class="stat-mini-icon late">
-                <i class="bi bi-exclamation-triangle"></i>
+                <i class="bi bi-clock-fill"></i>
             </div>
             <div class="stat-mini-text">
-                <div class="stat-mini-label">Terlambat</div>
+                <div class="stat-mini-label">Late</div>
                 <div class="stat-mini-value">{{ $stats['late'] ?? 0 }}</div>
             </div>
         </a>
@@ -98,7 +98,7 @@
                             </span>
                             @if($return->is_late)
                                 <span class="status-badge late">
-                                    <i class="bi bi-clock-fill"></i> Terlambat
+                                    <i class="bi bi-clock-fill"></i> Late
                                 </span>
                             @endif
                         </td>
@@ -163,7 +163,7 @@
         <div class="modal-header">
             <h3 class="modal-title">
                 <i class="bi bi-check-circle-fill" style="color: #10b981;"></i>
-                Konfirmasi Approve Pengembalian
+                Return Approval Confirmation
             </h3>
             <button class="modal-close" onclick="closeApproveModal()">
                 <i class="bi bi-x-lg"></i>
@@ -171,20 +171,20 @@
         </div>
         <div class="modal-body">
             <p class="modal-text">
-                Approve pengembalian buku <strong id="approveBookTitle"></strong> dari anggota <strong id="approveMemberName"></strong>?
+                Approve the return of book <strong id="approveBookTitle"></strong> from member <strong id="approveMemberName"></strong>?
                 <br><br>
-                Buku akan dikembalikan ke stok perpustakaan.
+                The book will be returned to the library stock.
             </p>
             <form id="approveForm" method="POST">
                 @csrf
                 <div class="modal-actions">
                     <button type="button" onclick="closeApproveModal()" class="btn btn-secondary">
                         <i class="bi bi-x-circle"></i>
-                        Batal
+                        Cancel
                     </button>
                     <button type="submit" class="btn btn-success">
                         <i class="bi bi-check-circle"></i>
-                        Ya, Approve
+                        Yes, Approve
                     </button>
                 </div>
             </form>
@@ -199,7 +199,7 @@
         <div class="modal-header">
             <h3 class="modal-title">
                 <i class="bi bi-x-circle-fill" style="color: #ef4444;"></i>
-                Konfirmasi Reject Pengembalian
+                Return Rejection Confirmation
             </h3>
             <button class="modal-close" onclick="closeRejectModal()">
                 <i class="bi bi-x-lg"></i>
@@ -207,20 +207,20 @@
         </div>
         <div class="modal-body">
             <p class="modal-text">
-                Tolak pengembalian buku <strong id="rejectBookTitle"></strong> dari anggota <strong id="rejectMemberName"></strong>?
+                Reject the return of book <strong id="rejectBookTitle"></strong> from member <strong id="rejectMemberName"></strong>?
                 <br><br>
-                Anggota harus mengajukan permintaan pengembalian kembali.
+                The member will need to submit a new return request.
             </p>
             <form id="rejectForm" method="POST">
                 @csrf
                 <div class="modal-actions">
                     <button type="button" onclick="closeRejectModal()" class="btn btn-secondary">
                         <i class="bi bi-x-circle"></i>
-                        Batal
+                        Cancel
                     </button>
                     <button type="submit" class="btn btn-danger">
                         <i class="bi bi-x-circle"></i>
-                        Ya, Reject
+                        Yes, Reject
                     </button>
                 </div>
             </form>
@@ -230,39 +230,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    function confirmApprove(returnId, memberName, bookTitle) {
-        document.getElementById('approveMemberName').textContent = memberName;
-        document.getElementById('approveBookTitle').textContent = bookTitle;
-        document.getElementById('approveForm').action = `/admin/returns/${returnId}/approve`;
-        document.getElementById('approveOverlay').classList.add('active');
-        document.getElementById('approveModal').classList.add('active');
-    }
-
-    function closeApproveModal() {
-        document.getElementById('approveOverlay').classList.remove('active');
-        document.getElementById('approveModal').classList.remove('active');
-    }
-
-    function confirmReject(returnId, memberName, bookTitle) {
-        document.getElementById('rejectMemberName').textContent = memberName;
-        document.getElementById('rejectBookTitle').textContent = bookTitle;
-        document.getElementById('rejectForm').action = `/admin/returns/${returnId}/reject`;
-        document.getElementById('rejectOverlay').classList.add('active');
-        document.getElementById('rejectModal').classList.add('active');
-    }
-
-    function closeRejectModal() {
-        document.getElementById('rejectOverlay').classList.remove('active');
-        document.getElementById('rejectModal').classList.remove('active');
-    }
-
-    // Close modals with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeApproveModal();
-            closeRejectModal();
-        }
-    });
-</script>
+<script src="{{ asset('js/admin/returns/index_returns.js') }}"></script>
 @endpush

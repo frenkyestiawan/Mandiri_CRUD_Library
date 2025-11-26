@@ -50,7 +50,7 @@
                     <div class="stat-value">{{ $lateReturnsCount }}</div>
                 </div>
                 <div class="stat-icon red">
-                    <i class="bi bi-exclamation-triangle"></i>
+                    <i class="bi bi-clock-fill"></i>
                 </div>
             </div>
         </div>
@@ -113,10 +113,10 @@
                             @php
                                 $status = $loan->status;
                                 $label = match($status) {
-                                    'pending' => 'Menunggu persetujuan',
-                                    'approved' => 'Sedang dipinjam',
-                                    'returned' => 'Selesai',
-                                    'rejected' => 'Ditolak',
+                                    'pending' => 'Pending Approval',
+                                    'approved' => 'Currently Borrowed',
+                                    'returned' => 'Completed',
+                                    'rejected' => 'Rejected',
                                     default => ucfirst($status),
                                 };
                             @endphp
@@ -125,7 +125,7 @@
                             </span>
                             @if($loan->is_late)
                                 <span class="status-badge late">
-                                    <i class="bi bi-clock-fill"></i> Terlambat
+                                    <i class="bi bi-clock-fill"></i> Late
                                 </span>
                             @endif
                         </td>
@@ -168,12 +168,12 @@
                 @forelse($pendingApprovedLoans as $loan)
                     <tr>
                         <td>{{ $loan->book->title }}</td>
-                        <td>
+                        <td style="text-align: center;">
                             @php
                                 $status = $loan->status;
                                 $label = match($status) {
-                                    'pending' => 'Menunggu persetujuan',
-                                    'approved' => 'Sedang dipinjam',
+                                    'pending' => 'Pending Approval',
+                                    'approved' => 'Currently Borrowed',
                                     default => ucfirst($status),
                                 };
                             @endphp

@@ -148,7 +148,7 @@
         <div class="modal-header">
             <h3 class="modal-title">
                 <i class="bi bi-bookmark-plus-fill" style="color: #3b82f6;"></i>
-                Konfirmasi Peminjaman
+                Borrow Confirmation
             </h3>
             <button class="modal-close" onclick="closeBorrowModal()">
                 <i class="bi bi-x-lg"></i>
@@ -156,9 +156,9 @@
         </div>
         <div class="modal-body">
             <p class="modal-text">
-                Apakah Anda yakin ingin meminjam buku <strong>{{ $book->title }}</strong>?
+                Are you sure you want to borrow the book <strong>{{ $book->title }}</strong>?
                 <br><br>
-                Permintaan peminjaman akan diajukan dan menunggu persetujuan admin.
+                Your loan request will be submitted and wait for admin approval.
             </p>
             <form action="{{ route('member.loans.store') }}" method="POST">
                 @csrf
@@ -166,11 +166,11 @@
                 <div class="modal-actions">
                     <button type="button" onclick="closeBorrowModal()" class="btn btn-secondary">
                         <i class="bi bi-x-circle"></i>
-                        Batal
+                        Cancel
                     </button>
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-check-circle"></i>
-                        Ya, Pinjam Buku
+                        Yes, Borrow Book
                     </button>
                 </div>
             </form>
@@ -180,33 +180,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    function showCoverModal() {
-        document.getElementById('coverOverlay').classList.add('active');
-        document.getElementById('coverModal').classList.add('active');
-    }
-
-    function closeCoverModal() {
-        document.getElementById('coverOverlay').classList.remove('active');
-        document.getElementById('coverModal').classList.remove('active');
-    }
-
-    function confirmBorrow() {
-        document.getElementById('borrowOverlay').classList.add('active');
-        document.getElementById('borrowModal').classList.add('active');
-    }
-
-    function closeBorrowModal() {
-        document.getElementById('borrowOverlay').classList.remove('active');
-        document.getElementById('borrowModal').classList.remove('active');
-    }
-
-    // Close modals with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeCoverModal();
-            closeBorrowModal();
-        }
-    });
-</script>
+<script src="{{ asset('js/anggota/book/show_book.js') }}"></script>
 @endpush

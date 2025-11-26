@@ -166,49 +166,6 @@
     </div>
 @endsection
 
-@push('styles')
-<style>
-    @import url('/css/authentication/register.css');
-</style>
-@endpush
-
 @push('scripts')
-<script>
-    function togglePassword(fieldId, iconId){
-        var f = document.getElementById(fieldId);
-        var i = document.getElementById(iconId);
-        if(!f) return;
-        if(f.type === 'password'){
-            f.type = 'text';
-            if(i) i.className = 'bi bi-eye-fill';
-        } else {
-            f.type = 'password';
-            if(i) i.className = 'bi bi-eye-slash-fill';
-        }
-    }
-
-    // Password strength indicator (optional)
-    document.addEventListener('DOMContentLoaded', function() {
-        const passwordInput = document.getElementById('password');
-        const confirmInput = document.getElementById('password_confirmation');
-
-        if (passwordInput && confirmInput) {
-            confirmInput.addEventListener('input', function() {
-                if (this.value && passwordInput.value !== this.value) {
-                    this.setCustomValidity('Password tidak cocok');
-                } else {
-                    this.setCustomValidity('');
-                }
-            });
-
-            passwordInput.addEventListener('input', function() {
-                if (confirmInput.value && this.value !== confirmInput.value) {
-                    confirmInput.setCustomValidity('Password tidak cocok');
-                } else {
-                    confirmInput.setCustomValidity('');
-                }
-            });
-        }
-    });
-</script>
+<script src="{{ asset('js/authentication/auth.js') }}"></script>
 @endpush

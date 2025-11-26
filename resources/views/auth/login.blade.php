@@ -131,18 +131,5 @@
 
 
 @push('scripts')
-<script>
-    function togglePassword(fieldId, iconId){
-        var f = document.getElementById(fieldId);
-        var i = document.getElementById(iconId);
-        if(!f) return;
-        if(f.type === 'password'){
-            f.type = 'text';
-            if(i) i.className = 'bi bi-eye-fill';
-        } else {
-            f.type = 'password';
-            if(i) i.className = 'bi bi-eye-slash-fill';
-        }
-    }
-</script>
+<script src="{{ asset('js/authentication/auth.js') }}"></script>
 @endpush

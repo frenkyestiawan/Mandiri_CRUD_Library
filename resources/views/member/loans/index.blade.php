@@ -3,9 +3,7 @@
 @section('title', 'Peminjaman Saya - E-PERPUS')
 
 @push('styles')
-<style>
-@import url("{{ asset('css/anggota/loan/index.loan.css') }}");
-</style>
+    <link rel="stylesheet" href="{{ asset('css/anggota/loan/index.loan.css') }}">
 @endpush
 
 @section('content')
@@ -206,8 +204,9 @@
         </div>
     </div>
 </div>
+
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/anggota/loan/index_loan.js') }}"></script>
+    <script src="{{ asset('js/anggota/loan/index_loan.js') }}"></script>
 @endpush

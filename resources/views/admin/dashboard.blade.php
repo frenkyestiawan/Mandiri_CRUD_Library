@@ -3,9 +3,7 @@
 @section('title', 'Dashboard Admin - E-PERPUS')
 
 @push('styles')
-<style>
-@import url("{{ asset('css/admin/dashboard.css') }}");
-</style>
+    <link rel="stylesheet" href="{{ asset('css/admin/dashboard.css') }}">
 @endpush
 
 @section('content')
@@ -192,5 +190,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/admin/dashboard.js') }}"></script>
+    <script src="{{ asset('js/admin/dashboard.js') }}"></script>
 @endpush

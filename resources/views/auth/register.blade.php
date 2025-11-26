@@ -3,9 +3,7 @@
 @section('title', config('app.name', 'E-PERPUS') . ' - Register')
 
 @push('styles')
-<style>
-    @import url('/css/authentication/register.css');
-</style>
+    <link rel="stylesheet" href="{{ asset('css/authentication/register.css') }}">
 @endpush
 
 @section('content')

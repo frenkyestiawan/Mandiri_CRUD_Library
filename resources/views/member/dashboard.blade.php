@@ -3,9 +3,7 @@
 @section('title', 'Dashboard Anggota - E-PERPUS')
 
 @push('styles')
-<style>
-@import url("{{ asset('css/anggota/dashboard.css') }}");
-</style>
+    <link rel="stylesheet" href="{{ asset('css/anggota/dashboard.css') }}">
 @endpush
 
 @section('content')

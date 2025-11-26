@@ -3,9 +3,7 @@
 @section('title', 'Daftar Buku - E-PERPUS')
 
 @push('styles')
-<style>
-@import url("{{ asset('css/admin/book/index_book.css') }}");
-</style>
+    <link rel="stylesheet" href="{{ asset('css/admin/book/index_book.css') }}">
 @endpush
 
 @section('content')
@@ -161,8 +159,6 @@
         @endif
     </div>
 
-</div>
-
     <!-- Delete Confirmation Modal -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
 <div class="modal" id="deleteModal">
@@ -201,5 +197,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/admin/books/index_book.js') }}"></script>
+    <script src="{{ asset('js/admin/books/index_book.js') }}"></script>
 @endpush

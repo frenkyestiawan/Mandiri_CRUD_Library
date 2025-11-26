@@ -3,9 +3,7 @@
 @section('title', 'Katalog Buku - E-PERPUS')
 
 @push('styles')
-<style>
-@import url("{{ asset('css/anggota/book/index_book.css') }}");
-</style>
+    <link rel="stylesheet" href="{{ asset('css/anggota/book/index_book.css') }}">
 @endpush
 
 @section('content')
@@ -218,5 +216,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/anggota/book/index_book.js') }}"></script>
+    <script src="{{ asset('js/anggota/book/index_book.js') }}"></script>
 @endpush

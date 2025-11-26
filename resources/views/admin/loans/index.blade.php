@@ -3,9 +3,7 @@
 @section('title', 'Peminjaman Buku - E-PERPUS')
 
 @push('styles')
-<style>
-@import url("{{ asset('css/admin/loan/index_loan.css') }}");
-</style>
+    <link rel="stylesheet" href="{{ asset('css/admin/loan/index_loan.css') }}">
 @endpush
 
 @section('content')
@@ -241,5 +239,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/admin/loans/index_loan.js') }}"></script>
+    <script src="{{ asset('js/admin/loans/index_loan.js') }}"></script>
 @endpush

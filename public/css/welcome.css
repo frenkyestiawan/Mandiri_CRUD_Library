@@ -205,8 +205,9 @@ body.dark .btn-login:hover {
 }
 
 .dark-mode-toggle {
-    padding: 8px;
-    border-radius: 8px;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
     border: 2px solid;
     background: transparent;
     cursor: pointer;
@@ -214,28 +215,33 @@ body.dark .btn-login:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 18px;
 }
 
 body:not(.dark) .dark-mode-toggle {
-    border-color: #e2e8f0;
-    color: #1e293b;
+    border-color: #e2e8f0; /* var(--border-color) */
+    color: #1e293b;        /* var(--text-dark) */
+    background: #ffffff;
 }
 
 body:not(.dark) .dark-mode-toggle:hover {
-    background: #dbeafe;
-    border-color: #2563eb;
+    background: #dbeafe;   /* var(--light-blue) */
+    border-color: #2563eb; /* var(--primary-blue) */
     color: #2563eb;
+    transform: rotate(15deg);
 }
 
 body.dark .dark-mode-toggle {
-    border-color: #475569;
+    border-color: rgba(100, 116, 139, 0.5);
     color: #e2e8f0;
+    background: rgba(30, 41, 59, 0.5);
 }
 
 body.dark .dark-mode-toggle:hover {
-    background: rgba(59, 130, 246, 0.2);
+    background: rgba(96, 165, 250, 0.2); /* var(--accent-blue) with opacity */
     border-color: #60a5fa;
     color: #60a5fa;
+    transform: rotate(-15deg);
 }
 
 /* Hero Section */
@@ -394,6 +400,22 @@ body:not(.dark) .section-title {
 
 body.dark .section-title {
     color: #60a5fa;
+}
+
+.section-subtitle {
+    max-width: 720px;
+    margin: -30px auto 45px;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+body:not(.dark) .section-subtitle {
+    color: #64748b;
+}
+
+body.dark .section-subtitle {
+    color: #9ca3af;
 }
 
 .features-grid {

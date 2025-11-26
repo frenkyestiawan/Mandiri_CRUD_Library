@@ -2,7 +2,7 @@
 
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/profile/profile.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/profile/profile.css') }}">
 @endpush
 
 <div class="container">
@@ -165,5 +165,5 @@
 
 
 @push('scripts')
-<script src="{{ asset('js/profile/profile.js') }}"></script>
+    <script src="{{ asset('js/profile/profile.js') }}"></script>
 @endpush

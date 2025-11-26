@@ -3,9 +3,7 @@
 @section('title', 'Permintaan Pengembalian - E-PERPUS')
 
 @push('styles')
-<style>
-@import url("{{ asset('css/admin/returns/index_returns.css') }}");
-</style>
+    <link rel="stylesheet" href="{{ asset('css/admin/returns/index_returns.css') }}">
 @endpush
 
 @section('content')
@@ -226,9 +224,80 @@
             </form>
         </div>
     </div>
-</div>
+
+    <!-- Approve Confirmation Modal -->
+    <div class="modal-overlay" id="approveOverlay" onclick="closeApproveModal()"></div>
+    <div class="modal" id="approveModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="bi bi-check-circle-fill" style="color: #10b981;"></i>
+                    Return Approval Confirmation
+                </h3>
+                <button class="modal-close" onclick="closeApproveModal()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-text">
+                    Approve the return of book <strong id="approveBookTitle"></strong> from member <strong id="approveMemberName"></strong>?
+                    <br><br>
+                    The book will be returned to the library stock.
+                </p>
+                <form id="approveForm" method="POST">
+                    @csrf
+                    <div class="modal-actions">
+                        <button type="button" onclick="closeApproveModal()" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i>
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle"></i>
+                            Yes, Approve
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Confirmation Modal -->
+    <div class="modal-overlay" id="rejectOverlay" onclick="closeRejectModal()"></div>
+    <div class="modal" id="rejectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="bi bi-x-circle-fill" style="color: #ef4444;"></i>
+                    Return Rejection Confirmation
+                </h3>
+                <button class="modal-close" onclick="closeRejectModal()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-text">
+                    Reject the return of book <strong id="rejectBookTitle"></strong> from member <strong id="rejectMemberName"></strong>?
+                    <br><br>
+                    The member will need to submit a new return request.
+                </p>
+                <form id="rejectForm" method="POST">
+                    @csrf
+                    <div class="modal-actions">
+                        <button type="button" onclick="closeRejectModal()" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i>
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-x-circle"></i>
+                            Yes, Reject
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/admin/returns/index_returns.js') }}"></script>
+    <script src="{{ asset('js/admin/returns/index_returns.js') }}"></script>
 @endpush

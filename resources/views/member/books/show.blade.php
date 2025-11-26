@@ -3,10 +3,9 @@
 @section('title', 'Detail Buku - E-PERPUS')
 
 @push('styles')
-<style>
-@import url("{{ asset('css/anggota/book/show_book.css') }}");
-</style>
+    <link rel="stylesheet" href="{{ asset('css/anggota/book/index_book.css') }}">
 @endpush
+
 
 @section('content')
 <div class="container" style="padding-top: 2rem; padding-bottom: 2rem; max-width: 1200px;">
@@ -180,5 +179,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/anggota/book/show_book.js') }}"></script>
+    <script src="{{ asset('js/anggota/book/show_book.js') }}"></script>
 @endpush

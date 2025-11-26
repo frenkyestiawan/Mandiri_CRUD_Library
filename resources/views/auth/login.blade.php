@@ -3,9 +3,7 @@
 @section('title', config('app.name', 'E-PERPUS') . ' - Login')
 
 @push('styles')
-<style>
-    @import url('/css/authentication/login.css');
-</style>
+    <link rel="stylesheet" href="{{ asset('css/authentication/login.css') }}">
 @endpush
 
 @section('content')
@@ -129,7 +127,6 @@
     </div>
 @endsection
 
-
 @push('scripts')
-<script src="{{ asset('js/authentication/auth.js') }}"></script>
+    <script src="{{ asset('js/authentication/auth.js') }}"></script>
 @endpush

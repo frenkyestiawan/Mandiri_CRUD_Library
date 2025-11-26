@@ -10,13 +10,14 @@
     }
     $watch('dark', value => {
         if (value) {
-            document.documentElement.classList.add('dark');
+            document.body.classList.add('dark');
             localStorage.setItem('theme', 'dark');
         } else {
-            document.documentElement.classList.remove('dark');
+            document.body.classList.remove('dark');
             localStorage.setItem('theme', 'light');
         }
     });
+    if (dark) document.body.classList.add('dark');
 " :class="{ 'dark': dark }">
 <head>
     <meta charset="utf-8">
@@ -106,91 +107,85 @@
             </div>
         </div>
     </section>
+<!-- Features Section -->
+<section class="features-section" id="features">
+    <div class="section-container">
+        <h2 class="section-title">Fitur Unggulan</h2>
+        <p class="section-subtitle">
+            Nikmati berbagai fitur modern yang memudahkan Anda dalam menemukan dan mengelola peminjaman buku.
+        </p>
 
-    <!-- Features Section -->
-    <section class="features-section" id="features">
-        <div class="section-container">
-            <h2 class="section-title">Fitur Unggulan</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="bi bi-search"></i>
-                    </div>
-                    <h3 class="feature-title">Pencarian Cepat</h3>
-                    <p class="feature-description">
-                        Temukan buku yang Anda cari dengan cepat menggunakan sistem pencarian canggih berdasarkan judul, penulis, atau kategori.
-                    </p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="bi bi-phone"></i>
-                    </div>
-                    <h3 class="feature-title">Akses Mobile</h3>
-                    <p class="feature-description">
-                        Akses perpustakaan kapan saja dan di mana saja melalui perangkat mobile Anda dengan tampilan responsif.
-                    </p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="bi bi-calendar-check"></i>
-                    </div>
-                    <h3 class="feature-title">Peminjaman Online</h3>
-                    <p class="feature-description">
-                        Pinjam buku secara online dengan mudah dan pantau status peminjaman Anda secara real-time.
-                    </p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="bi bi-bell"></i>
-                    </div>
-                    <h3 class="feature-title">Notifikasi Otomatis</h3>
-                    <p class="feature-description">
-                        Dapatkan pengingat otomatis untuk pengembalian buku dan informasi koleksi terbaru.
-                    </p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="bi bi-bookmark-star"></i>
-                    </div>
-                    <h3 class="feature-title">Wishlist & Favorit</h3>
-                    <p class="feature-description">
-                        Simpan buku favorit Anda dan buat daftar keinginan untuk dibaca nanti.
-                    </p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="bi bi-graph-up"></i>
-                    </div>
-                    <h3 class="feature-title">Riwayat Lengkap</h3>
-                    <p class="feature-description">
-                        Lihat riwayat peminjaman dan aktivitas membaca Anda secara mendetail.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
+        <div class="features-grid">
 
-    <!-- Stats Section -->
-    <section class="stats-section">
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number">10,000+</div>
-                <div class="stat-label">Koleksi Buku</div>
+            <!-- Pencarian Cepat -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-search"></i>
+                </div>
+                <h3 class="feature-title">Pencarian Cepat</h3>
+                <p class="feature-description">
+                    Temukan buku yang Anda cari dengan cepat melalui fitur pencarian berdasarkan judul, penulis, atau kategori.
+                </p>
             </div>
-            <div class="stat-card">
-                <div class="stat-number">5,000+</div>
-                <div class="stat-label">Anggota Aktif</div>
+
+            <!-- Akses Mobile -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-phone"></i>
+                </div>
+                <h3 class="feature-title">Akses Mobile Responsif</h3>
+                <p class="feature-description">
+                    Akses perpustakaan kapan saja dan di mana saja melalui tampilan mobile yang responsif dan nyaman digunakan.
+                </p>
             </div>
-            <div class="stat-card">
-                <div class="stat-number">50+</div>
-                <div class="stat-label">Kategori</div>
+
+            <!-- Peminjaman Online -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <h3 class="feature-title">Peminjaman Buku Online</h3>
+                <p class="feature-description">
+                    Ajukan peminjaman buku secara online dan pantau statusnya secara real-time tanpa harus datang ke perpustakaan.
+                </p>
             </div>
-            <div class="stat-card">
-                <div class="stat-number">24/7</div>
-                <div class="stat-label">Akses Online</div>
+
+            <!-- Rekomendasi Buku -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-stars"></i>
+                </div>
+                <h3 class="feature-title">Rekomendasi Buku</h3>
+                <p class="feature-description">
+                    Dapatkan rekomendasi buku berdasarkan daftar peminjaman terbanyak dan preferensi pembaca dengan minat serupa.
+                </p>
             </div>
+
+            <!-- Profil Anggota -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <h3 class="feature-title">Profil Anggota</h3>
+                <p class="feature-description">
+                    Kelola informasi keanggotaan Anda serta akses data peminjaman yang terhubung dengan akun Anda.
+                </p>
+            </div>
+
+            <!-- Riwayat Peminjaman -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+                <h3 class="feature-title">Riwayat Peminjaman</h3>
+                <p class="feature-description">
+                    Telusuri riwayat lengkap buku yang pernah Anda pinjam untuk memudahkan pemantauan aktivitas membaca.
+                </p>
+            </div>
+
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- CTA Section -->
     <section class="cta-section" id="about">

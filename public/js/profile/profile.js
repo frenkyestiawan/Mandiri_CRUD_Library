@@ -4,7 +4,7 @@ function previewPhoto(input) {
         const reader = new FileReader();
 
         reader.onload = function (e) {
-            const currentPhoto = document.querySelector('.current-photo');
+            const currentPhoto = document.querySelector(".current-photo");
             if (currentPhoto) {
                 currentPhoto.innerHTML = `<img src="${e.target.result}" alt="Preview" class="profile-photo">`;
             }

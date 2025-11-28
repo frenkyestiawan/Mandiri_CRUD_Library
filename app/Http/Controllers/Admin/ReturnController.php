@@ -16,7 +16,7 @@ class ReturnController extends Controller
 
         $query = ReturnModel::with('loan.user', 'loan.book')->latest();
 
-        if (!empty($status)) {
+        if (! empty($status)) {
             $query->where('status', $status);
         }
 

@@ -17,11 +17,11 @@ class BookController extends Controller
 
         $query = Book::query();
 
-        if (!empty($category)) {
+        if (! empty($category)) {
             $query->where('category', $category);
         }
 
-        if (!empty($search)) {
+        if (! empty($search)) {
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', '%'.$search.'%')
                     ->orWhere('author', 'like', '%'.$search.'%');

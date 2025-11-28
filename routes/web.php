@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProfilePasswordController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\LoanController as AdminLoanController;
 use App\Http\Controllers\Admin\ReturnController as AdminReturnController;
 use App\Http\Controllers\Member\MemberDashboardController;
 use App\Http\Controllers\Member\MemberLoanController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfilePasswordController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {

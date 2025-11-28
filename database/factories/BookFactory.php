@@ -17,7 +17,7 @@ class BookFactory extends Factory
         return [
             'title' => $this->faker->sentence(3),
             'author' => $this->faker->name(),
-'category' => $this->faker->randomElement([
+            'category' => $this->faker->randomElement([
                 'Fiksi',
                 'Non-Fiksi',
                 'Pendidikan / Akademik',

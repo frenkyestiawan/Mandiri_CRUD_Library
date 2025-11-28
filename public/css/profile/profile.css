@@ -67,7 +67,11 @@ body.dark .section-header {
     align-items: center;
     justify-content: center;
     font-size: 28px;
-    background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+    background: linear-gradient(
+        135deg,
+        var(--primary-blue),
+        var(--primary-dark)
+    );
     color: white;
     box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
     flex-shrink: 0;
@@ -78,7 +82,7 @@ body.dark .header-icon {
 }
 
 .section-title {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-size: 1.75rem;
     font-weight: 700;
     margin-bottom: 0.25rem;
@@ -167,14 +171,18 @@ body.dark .current-photo {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+    background: linear-gradient(
+        135deg,
+        var(--primary-blue),
+        var(--primary-dark)
+    );
 }
 
 .placeholder-initial {
     font-size: 4rem;
     font-weight: 700;
     color: white;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 .photo-overlay {
@@ -184,7 +192,11 @@ body.dark .current-photo {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+    background: linear-gradient(
+        135deg,
+        var(--primary-blue),
+        var(--primary-dark)
+    );
     display: flex;
     align-items: center;
     justify-content: center;
@@ -222,7 +234,7 @@ body.dark .photo-overlay {
     cursor: pointer;
     transition: all 0.3s ease;
     border-radius: 12px;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 0.9rem;
     display: inline-flex;
     align-items: center;
@@ -311,7 +323,7 @@ body.dark .form-label i {
     border: 2px solid;
     font-size: 0.95rem;
     transition: all 0.3s ease;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
 }
 
 body:not(.dark) .form-control {
@@ -375,7 +387,7 @@ body.dark .field-note {
 }
 
 .field-note::before {
-    content: 'ℹ';
+    content: "ℹ";
     font-size: 0.9rem;
 }
 
@@ -390,14 +402,21 @@ body.dark .field-note {
 }
 
 .form-error::before {
-    content: '⚠';
+    content: "⚠";
     font-size: 1rem;
 }
 
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
 }
 
 .verification-notice {

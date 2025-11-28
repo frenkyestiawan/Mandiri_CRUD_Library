@@ -13,25 +13,17 @@ class LibraryDummySeeder extends Seeder
 {
     public function run(): void
     {
-        // Use existing books (e.g. from BookSeeder) instead of creating new factory books
         $books = Book::all()->values();
 
         if ($books->isEmpty()) {
             return;
         }
 
-        // Map each loan index (0-19) to a specific book index so some books
-        // are borrowed multiple times: 5x, 3x, 2x, etc.
         $bookDistribution = [
-            // 0-4  : book 0 borrowed 5x
             0, 0, 0, 0, 0,
-            // 5-7  : book 1 borrowed 3x
             1, 1, 1,
-            // 8-9  : book 2 borrowed 2x
             2, 2,
-            // 10-15: books 3-8 borrowed 1x
             3, 4, 5, 6, 7, 8,
-            // 16-19: book 9 borrowed 4x
             9, 9, 9, 9,
         ];
 
@@ -60,7 +52,6 @@ class LibraryDummySeeder extends Seeder
         $members = $members->shuffle();
         $books = $books->shuffle();
 
-        // 5 pending loans
         for ($i = 0; $i < 5; $i++) {
             $bookIndex = $bookDistribution[$i] ?? 0;
             $book = $books[$bookIndex % $books->count()];
@@ -72,7 +63,6 @@ class LibraryDummySeeder extends Seeder
             ]);
         }
 
-        // 5 approved loans + 3 pending return requests
         for ($i = 5; $i < 10; $i++) {
             $borrowedAt = Carbon::now()->subDays(rand(0, 6));
             $dueAt = (clone $borrowedAt)->addDays(7);
@@ -88,7 +78,6 @@ class LibraryDummySeeder extends Seeder
                 'due_at' => $dueAt,
             ]);
 
-            // only first 3 approved loans get a pending return request
             if ($i < 8) {
                 ReturnModel::factory()->create([
                     'loan_id' => $loan->id,
@@ -98,7 +87,6 @@ class LibraryDummySeeder extends Seeder
             }
         }
 
-        // 4 returned on time (approved returns, not late)
         for ($i = 10; $i < 14; $i++) {
             $borrowedAt = Carbon::now()->subDays(rand(8, 20));
             $dueAt = (clone $borrowedAt)->addDays(7);
@@ -128,7 +116,6 @@ class LibraryDummySeeder extends Seeder
             ]);
         }
 
-        // 5 returned late
         for ($i = 15; $i < 20; $i++) {
             $borrowedAt = Carbon::now()->subDays(rand(10, 25));
             $dueAt = (clone $borrowedAt)->addDays(7);

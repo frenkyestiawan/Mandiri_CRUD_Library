@@ -60,6 +60,17 @@
                 @if (Route::has('login'))
                     @auth
                         <a href="{{ url('/dashboard') }}" class="btn btn-register">Dashboard</a>
+                        @if(Auth::user()->hasRole('Admin'))
+                            <a href="{{ route('admin.books.index') }}" class="btn btn-login">
+                                <i class="bi bi-journal-bookmark"></i>
+                                Katalog Buku
+                            </a>
+                        @elseif(Auth::user()->hasRole('Anggota'))
+                            <a href="{{ route('member.books.index') }}" class="btn btn-login">
+                                <i class="bi bi-journal-bookmark"></i>
+                                Katalog Buku
+                            </a>
+                        @endif
                     @else
                         <a href="{{ route('login') }}" class="btn btn-login">
                             <i class="bi bi-box-arrow-in-right"></i>
@@ -228,7 +239,6 @@
                 <h3 class="footer-title">Layanan</h3>
                 <a href="{{ route('login') }}" class="footer-link">Login</a>
                 <a href="{{ route('register') }}" class="footer-link">Pendaftaran</a>
-                <a href="#features" class="footer-link">Katalog Buku</a>
                 <a href="#about" class="footer-link">Bantuan</a>
             </div>
             <div>

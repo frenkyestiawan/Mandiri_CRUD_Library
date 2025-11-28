@@ -234,7 +234,7 @@
                         <h3>Tautan Cepat</h3>
                         <ul class="footer-links">
                             <li>
-                                <a href="{{ url('/') }}">
+                                <a href="{{ route('dashboard') }}">
                                     <i class="bi bi-chevron-right"></i>
                                     Beranda
                                 </a>
@@ -246,10 +246,29 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
-                                    <i class="bi bi-chevron-right"></i>
-                                    Katalog Buku
-                                </a>
+                                @auth
+                                    @if(Auth::user()->hasRole('Admin'))
+                                        <a href="{{ route('admin.books.index') }}">
+                                            <i class="bi bi-chevron-right"></i>
+                                            Katalog Buku
+                                        </a>
+                                    @elseif(Auth::user()->hasRole('Anggota'))
+                                        <a href="{{ route('member.books.index') }}">
+                                            <i class="bi bi-chevron-right"></i>
+                                            Katalog Buku
+                                        </a>
+                                    @else
+                                        <a href="#">
+                                            <i class="bi bi-chevron-right"></i>
+                                            Katalog Buku
+                                        </a>
+                                    @endif
+                                @else
+                                    <a href="#">
+                                        <i class="bi bi-chevron-right"></i>
+                                        Katalog Buku
+                                    </a>
+                                @endauth
                             </li>
                             <li>
                                 <a href="#">
@@ -277,10 +296,29 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
-                                    <i class="bi bi-chevron-right"></i>
-                                    Peminjaman Online
-                                </a>
+                                @auth
+                                    @if(Auth::user()->hasRole('Admin'))
+                                        <a href="{{ route('admin.loans.index') }}">
+                                            <i class="bi bi-chevron-right"></i>
+                                            Peminjaman Online
+                                        </a>
+                                    @elseif(Auth::user()->hasRole('Anggota'))
+                                        <a href="{{ route('member.loans.index') }}">
+                                            <i class="bi bi-chevron-right"></i>
+                                            Peminjaman Online
+                                        </a>
+                                    @else
+                                        <a href="#">
+                                            <i class="bi bi-chevron-right"></i>
+                                            Peminjaman Online
+                                        </a>
+                                    @endif
+                                @else
+                                    <a href="#">
+                                        <i class="bi bi-chevron-right"></i>
+                                        Peminjaman Online
+                                    </a>
+                                @endauth
                             </li>
                             <li>
                                 <a href="#">

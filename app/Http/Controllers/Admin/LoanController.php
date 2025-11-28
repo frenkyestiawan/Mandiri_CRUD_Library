@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Loan;
-use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 
 class LoanController extends Controller
@@ -16,7 +15,7 @@ class LoanController extends Controller
 
         $query = Loan::with(['user', 'book'])->latest();
 
-        if (!empty($status)) {
+        if (! empty($status)) {
             $query->where('status', $status);
         }
 
@@ -44,6 +43,7 @@ class LoanController extends Controller
     public function show(Loan $loan)
     {
         $loan->load(['user', 'book', 'returnRequest']);
+
         return view('admin.loans.show', compact('loan'));
     }
 

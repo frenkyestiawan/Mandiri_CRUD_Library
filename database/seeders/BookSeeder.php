@@ -10,7 +10,6 @@ class BookSeeder extends Seeder
     public function run(): void
     {
         $books = [
-            // 1. FIKSI (5)
             [
                 'title' => 'Laut Bercerita',
                 'author' => 'Leila S. Chudori',
@@ -62,7 +61,6 @@ class BookSeeder extends Seeder
                 'cover' => 'covers/harry-potter-sorcerers-stone.jpg',
             ],
 
-            // 2. NON-FIKSI (5)
             [
                 'title' => 'Filosofi Teras',
                 'author' => 'Henry Manampiring',
@@ -145,7 +143,6 @@ class BookSeeder extends Seeder
                 'description' => 'Panduan penting untuk merancang penelitian kualitatif, kuantitatif, dan metode campuran.',
                 'cover' => 'covers/research-design.jpg',
             ],
-
 
             // 4. TEKNOLOGI & KOMPUTER (3)
             [
@@ -252,7 +249,7 @@ class BookSeeder extends Seeder
                 'category' => 'Kesehatan & Kedokteran',
                 'publisher' => 'Wiley',
                 'stock' => 8,
-                'published_year' => 2014,  
+                'published_year' => 2014,
                 'description' => 'Referensi lengkap struktur dan fungsi organ tubuh manusia.',
                 'cover' => 'covers/principles-of-anatomy-physiology.jpg',
             ],
@@ -279,7 +276,6 @@ class BookSeeder extends Seeder
                 'cover' => 'covers/sirah-nabawiyah.jpg',
             ],
 
-            // 9. ANAK & REMAJA (3)
             [
                 'title' => 'Doraemon: Petualangan Nobita dalam Dunia Misteri',
                 'author' => 'Fujiko F. Fujio',
@@ -311,14 +307,13 @@ class BookSeeder extends Seeder
                 'cover' => 'covers/the-maze-runner.jpg',
             ],
 
-            // 10. SEJARAH & BUDAYA (3)
             [
                 'title' => 'Sejarah Dunia untuk Pembaca Muda',
                 'author' => 'Ernst H. Gombrich',
                 'category' => 'Sejarah & Budaya',
-                'publisher' => 'Marjin Kiri', 
+                'publisher' => 'Marjin Kiri',
                 'stock' => 7,
-                'published_year' => 2016, 
+                'published_year' => 2016,
                 'description' => 'Ringkasan sejarah dunia dari zaman kuno hingga era modern untuk pembaca muda.',
                 'cover' => 'covers/sejarah-dunia-untuk-pembaca-muda.jpg',
             ],
@@ -326,13 +321,13 @@ class BookSeeder extends Seeder
                 'title' => 'Nusantara: Sejarah Indonesia',
                 'author' => 'Bernard H.M. Vlekke',
                 'category' => 'Sejarah & Budaya',
-                'publisher' => 'Kepustakaan Populer Gramedia', 
+                'publisher' => 'Kepustakaan Populer Gramedia',
                 'stock' => 10,
-                'published_year' => 2008,  
+                'published_year' => 2008,
                 'description' => 'Sejarah Indonesia dari periode pra-kolonial hingga masa modern secara komprehensif.',
                 'cover' => 'covers/nusantara-sejarah-indonesia.jpg',
             ],
-           [
+            [
                 'title' => 'The Culture Map',
                 'author' => 'Erin Meyer',
                 'category' => 'Sejarah & Budaya',

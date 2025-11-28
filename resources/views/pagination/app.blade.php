@@ -1,6 +1,5 @@
 @if ($paginator->hasPages())
     <nav role="navigation" aria-label="Pagination Navigation">
-        {{-- First div: info text (disembunyikan oleh CSS .pagination nav > div:first-child) --}}
         <div>
             @if ($paginator->firstItem() !== null)
                 <span style="font-size: 0.85rem; color: var(--text-muted);">
@@ -15,10 +14,8 @@
             @endif
         </div>
 
-        {{-- Second div: link-link pagination (ditampilkan oleh CSS .pagination nav > div:nth-child(2)) --}}
         <div>
             <span class="relative z-0 inline-flex rounded-full shadow-sm">
-                {{-- Previous Page Link --}}
                 @if ($paginator->onFirstPage())
                     <span aria-disabled="true" aria-label="&laquo; Sebelumnya">
                         <span class="relative inline-flex items-center justify-center text-xs font-medium cursor-default">
@@ -35,16 +32,13 @@
                     </a>
                 @endif
 
-                {{-- Pagination Elements --}}
                 @foreach ($elements as $element)
-                    {{-- "Three Dots" Separator --}}
                     @if (is_string($element))
                         <span aria-disabled="true" class="relative inline-flex items-center justify-center text-xs font-medium cursor-default">
                             {{ $element }}
                         </span>
                     @endif
 
-                    {{-- Array Of Links --}}
                     @if (is_array($element))
                         @foreach ($element as $page => $url)
                             @if ($page == $paginator->currentPage())
@@ -60,7 +54,6 @@
                     @endif
                 @endforeach
 
-                {{-- Next Page Link --}}
                 @if ($paginator->hasMorePages())
                     <a href="{{ $paginator->nextPageUrl() }}" rel="next" class="relative inline-flex items-center justify-center text-xs font-medium" aria-label="Berikutnya &raquo;">
                         <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -79,9 +72,7 @@
             </span>
         </div>
 
-        {{-- Third div: additional info / tombol lain (disembunyikan oleh CSS .pagination nav > div:last-child) --}}
         <div>
-            {{-- Kosong untuk saat ini --}}
         </div>
     </nav>
 @endif

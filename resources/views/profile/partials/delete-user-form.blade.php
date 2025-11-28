@@ -1,37 +1,33 @@
 <div class="container">
     <div class="profile-card">
         <section class="profile-section">
-        <header class="section-header">
-            <div class="header-icon">
-                <i class="bi bi-exclamation-octagon"></i>
-            </div>
-            <div>
-                <h2 class="section-title">
-                    {{ __('Hapus Akun') }}
-                </h2>
-                <p class="section-description">
-                    {{ __('Menghapus akun akan menghapus seluruh data dan riwayat Anda secara permanen.') }}
+            <header class="section-header">
+                <div class="header-icon">
+                    <i class="bi bi-exclamation-octagon"></i>
+                </div>
+                <div>
+                    <h2 class="section-title">
+                        {{ __('Hapus Akun') }}
+                    </h2>
+                    <p class="section-description">
+                        {{ __('Menghapus akun akan menghapus seluruh data dan riwayat Anda secara permanen.') }}
+                    </p>
+                </div>
+            </header>
+
+            <div class="profile-form">
+                <p class="section-description" style="margin-bottom: 1.5rem">
+                    {{ __('Sebelum menghapus akun, pastikan Anda telah menyimpan data penting yang dibutuhkan.') }}
                 </p>
-            </div>
-        </header>
 
-        <div class="profile-form">
-            <p class="section-description" style="margin-bottom: 1.5rem;">
-                {{ __('Sebelum menghapus akun, pastikan Anda telah menyimpan data penting yang dibutuhkan.') }}
-            </p>
-
-            <div class="form-actions" style="border-top: none; padding-top: 0;">
-                <button
-                    type="button"
-                    class="btn btn-danger"
-                    x-data=""
-                    x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-                >
-                    <i class="bi bi-trash3"></i>
-                    {{ __('Hapus Akun') }}
-                </button>
+                <div class="form-actions" style="border-top: none; padding-top: 0">
+                    <button type="button" class="btn btn-danger" x-data=""
+                        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">
+                        <i class="bi bi-trash3"></i>
+                        {{ __('Hapus Akun') }}
+                    </button>
+                </div>
             </div>
-        </div>
         </section>
     </div>
 </div>
@@ -52,13 +48,8 @@
         <div class="mt-6">
             <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
 
-            <x-text-input
-                id="password"
-                name="password"
-                type="password"
-                class="mt-1 block w-3/4"
-                placeholder="{{ __('Password') }}"
-            />
+            <x-text-input id="password" name="password" type="password" class="mt-1 block w-3/4"
+                placeholder="{{ __('Password') }}" />
 
             <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
         </div>

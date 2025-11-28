@@ -1,0 +1,27 @@
+# Ignore all Blade files by default
+resources/views/**/*.blade.php
+
+# But include specific directories that we want to format
+!resources/views/auth/*.blade.php
+!resources/views/components/*.blade.php
+!resources/views/layouts/*.blade.php
+!resources/views/profile/**/*.blade.php
+
+# Ignore node_modules and other common directories
+node_modules/
+public/build/
+public/hot/
+public/storage
+public/vendor
+storage/*.key
+.env
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/.fleet
+/.idea
+/.vscode
+*.sublime-project
+*.sublime-workspace

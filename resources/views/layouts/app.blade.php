@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,11 +11,13 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    
+
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -23,32 +26,30 @@
 
     @stack('styles')
 </head>
-<body x-data="{ dark: false }" x-init="
-    const storedTheme = localStorage.getItem('theme');
-    if (storedTheme === 'dark') {
-        dark = true;
-    } else if (storedTheme === 'light') {
-        dark = false;
-    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        dark = true;
+
+<body x-data="{ dark: false }" x-init="const storedTheme = localStorage.getItem('theme');
+if (storedTheme === 'dark') {
+    dark = true;
+} else if (storedTheme === 'light') {
+    dark = false;
+} else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    dark = true;
+}
+$watch('dark', value => {
+    if (value) {
+        document.body.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.body.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
     }
-    $watch('dark', value => {
-        if (value) {
-            document.body.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            document.body.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-        }
-    });
-    if (dark) document.body.classList.add('dark');
-" :class="{ 'dark': dark }">
-    
+});
+if (dark) document.body.classList.add('dark');" :class="{ 'dark': dark }">
+
     <div class="main-wrapper">
         <!-- Navigation Bar -->
-        <nav class="navbar" x-data="{ open: false, scrolled: false }" 
-             @scroll.window="scrolled = window.pageYOffset > 20"
-             :class="{ 'scrolled': scrolled }">
+        <nav class="navbar" x-data="{ open: false, scrolled: false }" @scroll.window="scrolled = window.pageYOffset > 20"
+            :class="{ 'scrolled': scrolled }">
             <div class="navbar-container">
                 <!-- Left: Logo & Menu -->
                 <div class="navbar-left">
@@ -62,53 +63,53 @@
                     <!-- Desktop Menu -->
                     <ul class="navbar-menu" :class="{ 'show': open }">
                         @auth
-                            @if(Auth::user()->hasRole('Admin'))
+                            @if (Auth::user()->hasRole('Admin'))
                                 <li>
-                                    <a href="{{ route('admin.dashboard') }}" 
-                                       class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.dashboard') }}"
+                                        class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                                         <i class="bi bi-speedometer2"></i>
                                         Dashboard Admin
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.books.index') }}" 
-                                       class="nav-link {{ request()->routeIs('admin.books.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.books.index') }}"
+                                        class="nav-link {{ request()->routeIs('admin.books.*') ? 'active' : '' }}">
                                         <i class="bi bi-journal-bookmark"></i>
                                         Buku
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.loans.index') }}" 
-                                       class="nav-link {{ request()->routeIs('admin.loans.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.loans.index') }}"
+                                        class="nav-link {{ request()->routeIs('admin.loans.*') ? 'active' : '' }}">
                                         <i class="bi bi-arrow-left-right"></i>
                                         Peminjaman
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.returns.index') }}" 
-                                       class="nav-link {{ request()->routeIs('admin.returns.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.returns.index') }}"
+                                        class="nav-link {{ request()->routeIs('admin.returns.*') ? 'active' : '' }}">
                                         <i class="bi bi-arrow-repeat"></i>
                                         Pengembalian
                                     </a>
                                 </li>
                             @elseif(Auth::user()->hasRole('Anggota'))
                                 <li>
-                                    <a href="{{ route('member.dashboard') }}" 
-                                       class="nav-link {{ request()->routeIs('member.dashboard') ? 'active' : '' }}">
+                                    <a href="{{ route('member.dashboard') }}"
+                                        class="nav-link {{ request()->routeIs('member.dashboard') ? 'active' : '' }}">
                                         <i class="bi bi-house-door"></i>
                                         Dashboard
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('member.books.index') }}" 
-                                       class="nav-link {{ request()->routeIs('member.books.*') ? 'active' : '' }}">
+                                    <a href="{{ route('member.books.index') }}"
+                                        class="nav-link {{ request()->routeIs('member.books.*') ? 'active' : '' }}">
                                         <i class="bi bi-journal-bookmark"></i>
                                         Buku
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('member.loans.index') }}" 
-                                       class="nav-link {{ request()->routeIs('member.loans.*') ? 'active' : '' }}">
+                                    <a href="{{ route('member.loans.index') }}"
+                                        class="nav-link {{ request()->routeIs('member.loans.*') ? 'active' : '' }}">
                                         <i class="bi bi-bookmark-heart"></i>
                                         Peminjaman Saya
                                     </a>
@@ -211,7 +212,8 @@
                             <span class="footer-brand-text">E-PERPUS</span>
                         </div>
                         <p class="footer-description">
-                            Sistem perpustakaan digital modern yang memudahkan akses ke berbagai koleksi buku dan literatur untuk mendukung kegiatan belajar mengajar.
+                            Sistem perpustakaan digital modern yang memudahkan akses ke berbagai koleksi buku dan
+                            literatur untuk mendukung kegiatan belajar mengajar.
                         </p>
                         <div class="social-links">
                             <a href="#" class="social-link" title="Facebook">
@@ -247,7 +249,7 @@
                             </li>
                             <li>
                                 @auth
-                                    @if(Auth::user()->hasRole('Admin'))
+                                    @if (Auth::user()->hasRole('Admin'))
                                         <a href="{{ route('admin.books.index') }}">
                                             <i class="bi bi-chevron-right"></i>
                                             Katalog Buku
@@ -297,7 +299,7 @@
                             </li>
                             <li>
                                 @auth
-                                    @if(Auth::user()->hasRole('Admin'))
+                                    @if (Auth::user()->hasRole('Admin'))
                                         <a href="{{ route('admin.loans.index') }}">
                                             <i class="bi bi-chevron-right"></i>
                                             Peminjaman Online
@@ -371,4 +373,5 @@
 
     <script src="{{ asset('js/layout/app.js') }}"></script>
 </body>
+
 </html>

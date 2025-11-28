@@ -15,7 +15,6 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
-
     Route::get('/dashboard', function () {
         if (auth()->user()->hasRole('Admin')) {
             return redirect()->route('admin.dashboard');
@@ -27,14 +26,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Password update for profile
     Route::put('/password', [ProfilePasswordController::class, 'update'])->name('password.update');
 
     Route::middleware(['role:Admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-
-        Route::resource('books', AdminBookController::class);
+        Route::resource('books', AdminBookController::class)->except(['destroy']);
+        Route::delete('books/{book}', [AdminBookController::class, 'destroy'])
+            ->name('books.destroy')
+            ->middleware('web');
 
         Route::get('loans', [AdminLoanController::class, 'index'])->name('loans.index');
         Route::get('loans/{loan}', [AdminLoanController::class, 'show'])->name('loans.show');
@@ -42,6 +41,7 @@ Route::middleware('auth')->group(function () {
         Route::post('loans/{loan}/reject', [AdminLoanController::class, 'reject'])->name('loans.reject');
 
         Route::get('returns', [AdminReturnController::class, 'index'])->name('returns.index');
+        Route::post('returns', [AdminReturnController::class, 'store'])->name('returns.store');
         Route::post('returns/{return}/approve', [AdminReturnController::class, 'approve'])->name('returns.approve');
         Route::post('returns/{return}/reject', [AdminReturnController::class, 'reject'])->name('returns.reject');
     });

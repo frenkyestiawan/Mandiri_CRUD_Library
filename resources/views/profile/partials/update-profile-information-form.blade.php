@@ -1,8 +1,7 @@
 @section('title', 'Profile - E-PERPUS')
 
-
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/profile/profile.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/profile/profile.css') }}" />
 @endpush
 
 <div class="container">
@@ -17,12 +16,13 @@
                         {{ __('Informasi & Foto Profil') }}
                     </h2>
                     <p class="section-description">
-                        {{ __("Perbarui informasi profil dan foto akun Anda.") }}
+                        {{ __('Perbarui informasi profil dan foto akun Anda.') }}
                     </p>
                 </div>
             </header>
 
-            <form method="post" action="{{ route('profile.update') }}" class="profile-form" enctype="multipart/form-data">
+            <form method="post" action="{{ route('profile.update') }}" class="profile-form"
+                enctype="multipart/form-data">
                 @csrf
                 @method('patch')
 
@@ -31,8 +31,9 @@
                     <div class="profile-photo-section">
                         <div class="photo-wrapper">
                             <div class="current-photo">
-                                @if(Auth::user()->photo)
-                                    <img src="{{ asset('storage/' . Auth::user()->photo) }}" alt="Profile Photo" class="profile-photo">
+                                @if (Auth::user()->photo)
+                                    <img src="{{ asset('storage/' . Auth::user()->photo) }}" alt="Profile Photo"
+                                        class="profile-photo" />
                                 @else
                                     <div class="photo-placeholder">
                                         <span class="placeholder-initial">
@@ -45,21 +46,16 @@
                                 <i class="bi bi-camera"></i>
                             </div>
                         </div>
-                        
-                        <input 
-                            type="file" 
-                            id="photo-input" 
-                            name="photo" 
-                            accept="image/*" 
-                            class="photo-input-hidden"
-                            onchange="previewPhoto(this)"
-                        />
-                        
-                        <button type="button" class="btn btn-upload" onclick="document.getElementById('photo-input').click()">
+
+                        <input type="file" id="photo-input" name="photo" accept="image/*"
+                            class="photo-input-hidden" onchange="previewPhoto(this)" />
+
+                        <button type="button" class="btn btn-upload"
+                            onclick="document.getElementById('photo-input').click()">
                             <i class="bi bi-upload"></i>
                             {{ __('Unggah Foto') }}
                         </button>
-                        
+
                         <p class="photo-note">
                             {{ __('JPG, PNG atau GIF. Maksimal 2MB.') }}
                         </p>
@@ -76,17 +72,9 @@
                                 <i class="bi bi-person"></i>
                                 {{ __('Nama Lengkap') }}
                             </label>
-                            <input 
-                                id="name" 
-                                name="name" 
-                                type="text" 
-                                class="form-control" 
-                                value="{{ old('name', $user->name) }}" 
-                                required 
-                                autofocus 
-                                autocomplete="name"
-                                placeholder="Masukkan nama lengkap"
-                            />
+                            <input id="name" name="name" type="text" class="form-control"
+                                value="{{ old('name', $user->name) }}" required autofocus autocomplete="name"
+                                placeholder="Masukkan nama lengkap" />
                             @error('name')
                                 <span class="form-error">{{ $message }}</span>
                             @enderror
@@ -97,39 +85,32 @@
                                 <i class="bi bi-envelope"></i>
                                 {{ __('Email') }}
                             </label>
-                            <input 
-                                id="email" 
-                                name="email" 
-                                type="email" 
-                                class="form-control" 
-                                value="{{ old('email', $user->email) }}" 
-                                required 
-                                autocomplete="username"
-                                placeholder="admin@example.com"
-                            />
+                            <input id="email" name="email" type="email" class="form-control"
+                                value="{{ old('email', $user->email) }}" required autocomplete="username"
+                                placeholder="admin@example.com" />
                             @error('email')
                                 <span class="form-error">{{ $message }}</span>
                             @enderror
                         </div>
 
                         {{--
-                        <div class="form-group">
+                            <div class="form-group">
                             <label for="role" class="form-label">
-                                <i class="bi bi-shield-check"></i>
-                                {{ __('Role') }}
+                            <i class="bi bi-shield-check"></i>
+                            {{ __('Role') }}
                             </label>
-                            <input 
-                                id="role" 
-                                type="text" 
-                                class="form-control" 
-                                value="{{ Auth::user()->roles->first()->name ?? 'No Role' }}" 
-                                readonly
-                                disabled
+                            <input
+                            id="role"
+                            type="text"
+                            class="form-control"
+                            value="{{ Auth::user()->roles->first()->name ?? 'No Role' }}"
+                            readonly
+                            disabled
                             />
                             <p class="field-note">
-                                {{ __('Role tidak dapat diubah oleh pengguna.') }}
+                            {{ __('Role tidak dapat diubah oleh pengguna.') }}
                             </p>
-                        </div>
+                            </div>
                         --}}
                     </div>
                 </div>
@@ -146,13 +127,8 @@
                     </button>
 
                     @if (session('status') === 'profile-updated')
-                        <div
-                            x-data="{ show: true }"
-                            x-show="show"
-                            x-transition
-                            x-init="setTimeout(() => show = false, 3000)"
-                            class="save-status"
-                        >
+                        <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => (show = false), 3000)"
+                            class="save-status">
                             <i class="bi bi-check-circle-fill"></i>
                             {{ __('Perubahan berhasil disimpan!') }}
                         </div>
@@ -162,7 +138,6 @@
         </section>
     </div>
 </div>
-
 
 @push('scripts')
     <script src="{{ asset('js/profile/profile.js') }}"></script>

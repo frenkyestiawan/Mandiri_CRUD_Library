@@ -3,7 +3,7 @@
 @section('title', config('app.name', 'E-PERPUS') . ' - Register')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/authentication/register.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/authentication/register.css') }}" />
 @endpush
 
 @section('content')
@@ -14,7 +14,9 @@
                     <i class="bi bi-person-plus-fill"></i>
                 </div>
                 <div class="register-title">{{ __('Daftar Akun') }}</div>
-                <div class="register-subtitle">{{ __('Buat akun baru untuk mengakses perpustakaan digital') }}</div>
+                <div class="register-subtitle">
+                    {{ __('Buat akun baru untuk mengakses perpustakaan digital') }}
+                </div>
             </div>
 
             <form method="POST" action="{{ route('register') }}" autocomplete="off">
@@ -28,17 +30,9 @@
                     </label>
                     <div class="input-wrapper">
                         <div class="input-icon"><i class="bi bi-person-fill"></i></div>
-                        <input 
-                            id="name" 
-                            type="text" 
-                            class="form-control @error('name') is-invalid @enderror" 
-                            name="name" 
-                            value="{{ old('name') }}" 
-                            required 
-                            autofocus
-                            autocomplete="name" 
-                            placeholder="Masukkan nama lengkap"
-                        >
+                        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
+                            name="name" value="{{ old('name') }}" required autofocus autocomplete="name"
+                            placeholder="Masukkan nama lengkap" />
                     </div>
                     @error('name')
                         <div class="invalid-feedback">
@@ -56,16 +50,9 @@
                     </label>
                     <div class="input-wrapper">
                         <div class="input-icon"><i class="bi bi-envelope-fill"></i></div>
-                        <input 
-                            id="email" 
-                            type="email" 
-                            class="form-control @error('email') is-invalid @enderror" 
-                            name="email" 
-                            value="{{ old('email') }}" 
-                            required
-                            autocomplete="username" 
-                            placeholder="Masukkan alamat email"
-                        >
+                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                            name="email" value="{{ old('email') }}" required autocomplete="username"
+                            placeholder="Masukkan alamat email" />
                     </div>
                     @error('email')
                         <div class="invalid-feedback">
@@ -83,16 +70,9 @@
                     </label>
                     <div class="input-wrapper">
                         <div class="input-icon"><i class="bi bi-lock-fill"></i></div>
-                        <input 
-                            id="password" 
-                            type="password" 
-                            class="form-control @error('password') is-invalid @enderror" 
-                            name="password" 
-                            required 
-                            autocomplete="new-password"
-                            placeholder="Minimal 8 karakter"
-                        >
-                        <button type="button" class="password-toggle" onclick="togglePassword('password','toggleIcon1')">
+                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
+                            name="password" required autocomplete="new-password" placeholder="Minimal 8 karakter" />
+                        <button type="button" class="password-toggle" onclick="togglePassword('password', 'toggleIcon1')">
                             <i class="bi bi-eye-slash-fill" id="toggleIcon1"></i>
                         </button>
                     </div>
@@ -112,16 +92,12 @@
                     </label>
                     <div class="input-wrapper">
                         <div class="input-icon"><i class="bi bi-shield-fill-check"></i></div>
-                        <input 
-                            id="password_confirmation" 
-                            type="password" 
-                            class="form-control @error('password_confirmation') is-invalid @enderror" 
-                            name="password_confirmation" 
-                            required 
-                            autocomplete="new-password"
-                            placeholder="Ulangi password"
-                        >
-                        <button type="button" class="password-toggle" onclick="togglePassword('password_confirmation','toggleIcon2')">
+                        <input id="password_confirmation" type="password"
+                            class="form-control @error('password_confirmation') is-invalid @enderror"
+                            name="password_confirmation" required autocomplete="new-password"
+                            placeholder="Ulangi password" />
+                        <button type="button" class="password-toggle"
+                            onclick="togglePassword('password_confirmation', 'toggleIcon2')">
                             <i class="bi bi-eye-slash-fill" id="toggleIcon2"></i>
                         </button>
                     </div>
@@ -136,15 +112,11 @@
                 <!-- Terms & Conditions -->
                 <div class="form-terms">
                     <div class="form-check">
-                        <input 
-                            class="form-check-input" 
-                            type="checkbox" 
-                            name="terms" 
-                            id="terms"
-                            required
-                        >
+                        <input class="form-check-input" type="checkbox" name="terms" id="terms" required />
                         <label class="form-check-label" for="terms">
-                            Saya menyetujui <a href="#" class="terms-link">syarat dan ketentuan</a> yang berlaku
+                            Saya menyetujui
+                            <a href="#" class="terms-link">syarat dan ketentuan</a>
+                            yang berlaku
                         </label>
                     </div>
                 </div>
@@ -157,7 +129,10 @@
 
                 <!-- Login Link -->
                 <div class="login-link">
-                    <small>Sudah punya akun? <a href="{{ route('login') }}">Masuk di sini</a></small>
+                    <small>
+                        Sudah punya akun?
+                        <a href="{{ route('login') }}">Masuk di sini</a>
+                    </small>
                 </div>
             </form>
         </div>
@@ -165,5 +140,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/authentication/auth.js') }}"></script>
+    <script src="{{ asset('js/authentication/auth.js') }}"></script>
 @endpush

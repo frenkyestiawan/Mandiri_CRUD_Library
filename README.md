@@ -94,16 +94,7 @@ php artisan key:generate
 php artisan migrate --seed
 ```
 
-#### 6️⃣ Build Assets
-```bash
-# Development
-npm run dev
-
-# Production
-npm run build
-```
-
-#### 7️⃣ Jalankan Aplikasi
+#### 6️⃣ Jalankan Aplikasi
 ```bash
 php artisan serve
 ```

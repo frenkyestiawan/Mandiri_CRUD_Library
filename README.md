@@ -81,7 +81,7 @@ mkdir -p storage/app/public/covers
 ```
 
 **Salin gambar covers:**
-Pindahkan/salin semua file gambar dari `public/assets/covers` ke `storage/app/public/covers`
+Pindahkan/salin semua file gambar dari `public/covers` ke `storage/app/public/covers`
 
 
 

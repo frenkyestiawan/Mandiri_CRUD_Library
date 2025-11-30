@@ -44,7 +44,7 @@ $watch('dark', value => {
         localStorage.setItem('theme', 'light');
     }
 });
-if (dark) document.body.classList.add('dark');" :class="{ 'dark': dark }">
+if (dark) document.body.classList.add('dark');" class="@stack('body-class')" :class="{ 'dark': dark }">
 
     <div class="main-wrapper">
         <!-- Navigation Bar -->

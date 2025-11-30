@@ -3,7 +3,20 @@
 @section('title', config('app.name', 'E-PERPUS') . ' - Register')
 
 @push('styles')
+    <style>
+        .footer {
+            display: none !important;
+        }
+    </style>
     <link rel="stylesheet" href="{{ asset('css/authentication/register.css') }}" />
+@endpush
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('auth-page');
+        });
+    </script>
 @endpush
 
 @section('content')

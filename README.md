@@ -67,7 +67,11 @@ DB_PASSWORD=
 
 > **⚠️ PENTING:** Langkah ini wajib dilakukan agar seeder berjalan dengan baik!
 ```bash
+# Install package spatie/laravel-permission
 composer require spatie/laravel-permission
+
+# Publish migration dan konfigurasi
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 
 # Buat symbolic link untuk storage
 php artisan storage:link
